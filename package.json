@@ -1,0 +1,41 @@
+{
+  "name": "jabber",
+  "version": "1.0.0",
+  "description": "Fun project for chat app with node and react",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "prod": "SET NODE_ENV=production&&nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chhiring90/jabber.git"
+  },
+  "author": "Chhiring Tamang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chhiring90/jabber/issues"
+  },
+  "homepage": "https://github.com/chhiring90/jabber#readme",
+  "engines": {
+    "node": "^14.0.1"
+  },
+  "dependencies": {
+    "chalk": "^4.1.1",
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.10",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.26.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.23.2",
+    "prettier": "^2.3.0"
+  }
+}
