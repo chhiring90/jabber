@@ -13,9 +13,9 @@ mongoose.connect(DB, {
     useCreateIndex: true,
     useFindAndModify: false,
     useUnifiedTopology: true
-}).then(() => console.log(`Database connected succesfully`));
+}).then(() => console.log(chalk.greenBright('Database connected succesfully')));
 
 // START SERVER 
 const port = process.env.PORT || 3000;
 app.listen(port, () =>
-    console.log(`Server listening to port ${chalk.magenta(port)} on ${chalk.magenta(process.env.NODE_ENV)} mode.`));
+    console.log(`Server listening to port ${chalk.cyan(port)} on ${chalk.cyan(process.env.NODE_ENV.toUpperCase())} mode.`));
