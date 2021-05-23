@@ -16,6 +16,6 @@ mongoose.connect(DB, {
 }).then(() => console.log(chalk.greenBright('Database connected succesfully')));
 
 // START SERVER 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 app.listen(port, () =>
     console.log(`Server listening to port ${chalk.cyan(port)} on ${chalk.cyan(process.env.NODE_ENV.toUpperCase())} mode.`));
