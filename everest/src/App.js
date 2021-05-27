@@ -1,16 +1,16 @@
 import React from 'react';
-import { Route, Switch, Redirect, BrowserRouter as Router } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import SignUp from './containers/Signup';
+import Login from './containers/Login';
 
 function App() {
 	return (
 		<>
-			<Router>
-				<Switch>
-					<Route path="/" component={SignUp} />
-				</Switch>
-			</Router>
+			<Switch>
+				<Route path="/signup" exact component={SignUp} />
+				<Route path="/login" component={Login} />
+			</Switch>
 		</>
 	);
 }

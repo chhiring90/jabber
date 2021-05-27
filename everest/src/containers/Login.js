@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { FormSection, FormContainer, FormGraphic } from '../hoc/FormLayout';
 import FormTitle from '../components/FormTitle';
-import * as action from '../stores/actions/index';
 
-class SignUp extends Component {
+export default class Login extends Component {
 
     constructor(props) {
         super(props);
@@ -27,18 +26,11 @@ class SignUp extends Component {
                 <FormContainer>
                     <form className="max-w-lg w-full mx-auto" onSubmit={this.formSubmitHandler}>
                         <FormTitle
-                            title="Create Account"
-                            link="/login"
-                            linkContent="Login">
+                            title="Log In"
+                            link="/signup"
+                            linkContent="Create an account">
                             Not registered yet?
                         </FormTitle>
-                        <Input
-                            elementType="input"
-                            type="text"
-                            placeholder="Your Name"
-                            id="name"
-                            name="name"
-                            label="Your Name" />
                         <Input
                             elementType="input"
                             type="email"
@@ -56,12 +48,16 @@ class SignUp extends Component {
                             label="Password" />
                         <Input
                             elementType="input"
-                            type="password"
-                            placeholder="Password Confirm"
-                            id="password-confirm"
-                            name="password-confirm"
-                            label="Password Confirm" />
-                        <Button buttonType="button" type="submit">Create Account</Button>
+                            type="checkbox"
+                            id="checkbox"
+                            name="checkbox"
+                            label="Remember me" />
+                        <NavLink
+                            className="block text-brand-primary font-semibold mb-4"
+                            to="/forgot-password">Forgot Password ?</NavLink>
+                        <Button
+                            buttonType="button"
+                            type="submit">Log In</Button>
                     </form>
                 </FormContainer>
                 <FormGraphic></FormGraphic>
@@ -70,13 +66,3 @@ class SignUp extends Component {
     }
 
 }
-
-const mapStateToProps = state => {
-
-}
-
-const mapDispatchToProps = dispatch => {
-
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

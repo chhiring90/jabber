@@ -5,7 +5,7 @@ module.exports = {
     extend: {
       colors: {
         brand: {
-          tertary: '#0D1C2E',
+          tertiary: '#0D1C2E',
           primary: '#2A8BF2',
           secondary: '#FF3366',
           'secondary-100': '#FDFBFD',
@@ -17,12 +17,20 @@ module.exports = {
       },
       fontFamily: {
         poppins: "'Poppins', sans-serif",
-        montserrat: "'Montserrat', sans-serif"
+        montserrat: "'Montserrat', sans-serif",
+        quicksand: "'Quicksand', sans-serif"
+      },
+      minHeight: {
+        '2xl': '635px'
       }
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ['active'],
+    },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+  ],
 }
