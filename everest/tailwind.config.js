@@ -21,7 +21,7 @@ module.exports = {
         quicksand: "'Quicksand', sans-serif"
       },
       minHeight: {
-        '2xl': '635px'
+        '2xl': '665px'
       }
     },
   },
