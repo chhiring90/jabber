@@ -7,12 +7,9 @@ const SignupForm = ({ submit, signupData, changed }) => {
         .map(key => {
             return [...Array(signupData[key])]
                 .map(input => <Input
-                    key={input.key}
+                    key={key}
                     elementType={input.elementType}
-                    type={input.type}
-                    placeholder={input.placeholder}
-                    id={input.id}
-                    name={input.name}
+                    elementConfig={input.elementConfig}
                     label={input.label}
                     require={input.require}
                     changed={event => changed(event, key)} />)
@@ -20,7 +17,7 @@ const SignupForm = ({ submit, signupData, changed }) => {
         .reduce((acc, el) => acc.concat(el), []);
 
     return (
-        <Form onSubmit={submit}>
+        <Form submit={submit}>
             <FormTitle
                 title="Create Account"
                 link="/login"

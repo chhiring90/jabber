@@ -12,14 +12,11 @@ const LoginForm = ({ loginData, changed, submit }) => {
                 .map(input => <Input
                     key={input.key}
                     elementType={input.elementType}
-                    type={input.type}
-                    placeholder={input.placeholder}
-                    id={input.id}
-                    name={input.name}
                     label={input.label}
+                    elementConfig={input.elementConfig}
                     require={true}
                     value={input.value}
-                    changed={changed}
+                    changed={(event) => changed(event, key)}
                 />)
         })
         .reduce((acc, el) => acc.concat(el), []);

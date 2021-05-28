@@ -11,35 +11,48 @@ export default class Login extends Component {
         formData: {
             email: {
                 key: `${uuid()}`,
-                elementType: 'input',
-                type: "email",
-                placeholder: "Your Email",
-                id: "email",
-                name: "email",
                 label: "Your Email",
-                require: true,
+                elementType: 'input',
                 value: '',
+                elementConfig: {
+                    type: "email",
+                    placeholder: "Your Email",
+                    id: "email",
+                    name: "email",
+                },
+                validation: {
+                    require: true,
+                    isEmail: true
+                }
             },
             password: {
                 key: `${uuid()}`,
                 elementType: 'input',
-                type: 'password',
-                placeholder: 'Password',
-                id: 'password',
-                name: 'password',
                 label: 'Password',
-                require: false,
                 value: '',
+                elementConfig: {
+                    type: 'password',
+                    placeholder: 'Password',
+                    id: 'password',
+                    name: 'password',
+                },
+                validation: {
+                    require: true,
+                }
             },
             checkbox: {
                 key: `${uuid()}`,
                 elementType: 'input',
-                type: 'checkbox',
-                id: 'checkbox',
-                name: 'checkbox',
                 label: 'Remember me',
-                require: false,
-                value: ''
+                value: '',
+                elementConfig: {
+                    type: 'checkbox',
+                    id: 'checkbox',
+                    name: 'checkbox'
+                },
+                validation: {
+                    require: false,
+                }
             }
         }
     }
@@ -48,8 +61,16 @@ export default class Login extends Component {
         event.preventDefault();
     }
 
-    onChangeHandler = (event) => {
+    inputChangeHandler = (event, controlName) => {
+        const updateControls = {
+            ...this.state.formData,
+            [controlName]: {
+                ...this.state.formData[controlName],
+                value: event.target.value
+            }
+        };
 
+        this.setState({ formData: updateControls });
     }
 
     render() {
@@ -57,7 +78,7 @@ export default class Login extends Component {
             <FormSection>
                 <FormContainer>
                     <LoginForm
-                        changed={(event) => this.onChangeHandler}
+                        changed={this.inputChangeHandler}
                         loginData={this.state.formData} />
                 </FormContainer>
                 <FormGraphic></FormGraphic>

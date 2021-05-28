@@ -4,7 +4,7 @@ import uuid from 'react-uuid';
 
 import { FormSection, FormContainer, FormGraphic } from '../hoc/FormLayout';
 import SignupForm from '../components/SignupForm';
-import * as action from '../stores/actions/index';
+import * as actions from '../stores/actions/index';
 
 class SignUp extends Component {
 
@@ -15,64 +15,94 @@ class SignUp extends Component {
                 key: `${uuid()}`,
                 label: 'Your Name',
                 elementType: 'input',
-                type: 'text',
-                placeholder: 'Your Name',
-                id: 'name',
-                name: 'name',
-                require: true,
                 value: '',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Your Name',
+                    id: 'name',
+                    name: 'name',
+                },
+                validation: {
+                    require: true,
+                },
             },
             email: {
                 key: `${uuid()}`,
                 label: 'Your Email',
                 elementType: 'input',
-                type: 'email',
-                placeholder: 'Your Email',
-                id: 'email',
-                name: 'email',
-                require: true,
                 value: '',
+                elementConfig: {
+                    placeholder: 'Your Email',
+                    type: 'email',
+                    id: 'email',
+                    name: 'email',
+                },
+                validation: {
+                    require: true,
+                    isEmail: true
+                }
             },
             password: {
                 key: `${uuid()}`,
                 label: 'Password',
                 elementType: 'input',
-                type: 'password',
-                placeholder: 'Password',
-                id: 'password',
-                name: 'password',
-                require: true,
                 value: '',
+                elementConfig: {
+                    placeholder: 'Password',
+                    type: 'password',
+                    id: 'password',
+                    name: 'password'
+                },
+                validation: {
+                    require: true,
+                    minLength: 8
+                },
             },
             passwordConfirm: {
                 key: `${uuid()}`,
                 elementType: 'input',
-                type: 'password',
-                placeholder: 'Password Confirm',
-                id: 'password-confirm',
-                name: 'password-confirm',
                 label: 'Password Confirm',
-                require: true,
                 value: '',
+                elementConfig: {
+                    placeholder: 'Password Confirm',
+                    id: 'password-confirm',
+                    name: 'password-confirm',
+                    type: 'password',
+                },
+                validation: {
+                    require: true,
+                    minLength: 8
+                }
             }
         }
     }
 
     onSubmitHandler = (event) => {
         event.preventDefault();
-        this.props.onSignUp()
+        const { name, email, password, passwordConfirm } = this.state.formData;
+        this.props.onSignUp(name.value, email.value, password.value, passwordConfirm.value);
     }
 
-    onChangeHandler = (event, id) => {
-        console.log(id);
+    inputChangeHandler = (event, controlName) => {
+        const updateControls = {
+            ...this.state.formData,
+            [controlName]: {
+                ...this.state.formData[controlName],
+                value: event.target.value,
+                // valid: checkValid
+            }
+        }
+
+        this.setState({ formData: updateControls });
     };
 
     render() {
+        console.log(this.props.isAuthenticated);
         return (
             <FormSection>
                 <FormContainer>
                     <SignupForm
-                        changed={(event) => this.onChangeHandler}
+                        changed={this.inputChangeHandler}
                         signupData={this.state.formData}
                         submit={this.onSubmitHandler} />
                 </FormContainer>
@@ -92,7 +122,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onSignUp: (name, email, password, passwordConfirm) => dispatch(action.signup(name, email, password, passwordConfirm))
+        onSignUp: (name, email, password, passwordConfirm) => dispatch(actions.signup(name, email, password, passwordConfirm))
     }
 }
 

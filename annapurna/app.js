@@ -1,12 +1,20 @@
 const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 
 const userRoutes = require('./routes/userRoutes');
 const globalErrorHandler = require('./controllers/errorController');
 const AppError = require('./utils/appError');
 
 const app = express();
+
+app.enable('trust proxy');
+
+app.use(cors({
+    origin: true,
+    // credentials: true
+}));
 
 //  Serve Static Files
 app.use(express.static(path.join(__dirname, 'public')));

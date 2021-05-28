@@ -8,7 +8,7 @@ export const FormTitle = ({ children, title, link, linkContent }) => (
 );
 
 export const Form = ({ children, submit }) => (
-    <form className="max-w-lg w-full mx-auto" onSubmit={submit}>
+    <form className="max-w-lg w-full mx-auto" onSubmit={(event) => submit(event)}>
         {children}
     </form>
 );

@@ -1,16 +1,13 @@
 import React from 'react';
 import uuid from 'react-uuid';
 
-const Input = ({ elementType, type, value, placeholder, changed, name, options, require, id, label }) => {
+const Input = ({ elementType, changed, value, options, elementConfig, require, label }) => {
     let inputElement = null;
     switch (elementType) {
         case 'input':
             inputElement = <input
-                className={['checkbox', 'radio'].includes(type) ? 'order-1' : ''}
-                id={id}
-                type={type}
-                placeholder={placeholder}
-                name={name}
+                className={['checkbox', 'radio'].includes(elementConfig.type) ? 'order-1' : ''}
+                {...elementConfig}
                 value={value}
                 onChange={changed}
                 required={require ? true : ''} />;
@@ -18,7 +15,7 @@ const Input = ({ elementType, type, value, placeholder, changed, name, options, 
         case 'select':
             inputElement = (
                 <select
-                    id={id}
+                    {...elementConfig}
                     value={value}
                     onChange={changed}>
                     {options.map(option =>
@@ -32,9 +29,7 @@ const Input = ({ elementType, type, value, placeholder, changed, name, options, 
         case 'textarea':
             inputElement = (
                 <textarea
-                    id={id}
-                    value={value}
-                    placeholder={placeholder}
+                    {...elementConfig}
                     onChange={changed}>
                 </textarea>);
             break;
@@ -47,8 +42,8 @@ const Input = ({ elementType, type, value, placeholder, changed, name, options, 
         <div className="mb-4 w-full flex flex-wrap items-center">
             {!typeIsInput && label &&
                 <label
-                    className={`inline-block leading-5 tracking-wider font-semibold text-brand-gray ${['checkbox', 'radio'].includes(type) ? 'order-2 mb-0 ml-2' : 'mb-2'}`}
-                    htmlFor={id}>
+                    className={`inline-block leading-5 tracking-wider font-semibold text-brand-gray ${['checkbox', 'radio'].includes(elementConfig.type) ? 'order-2 mb-0 ml-2' : 'mb-2'}`}
+                    htmlFor={elementConfig.id}>
                     {label}
                 </label>}
             { inputElement}
