@@ -42,3 +42,28 @@ export const signup = (name, email, password, passwordConfirm) => {
         }).catch(err => signupFail(err.response.data.message));
     }
 }
+
+const onLoginStart = () => {
+    return {
+        type: actionTypes.AUTH_LOGIN_START
+    }
+}
+
+const onLoginSuccess = () => {
+    return {
+        type: actionTypes.AUTH_LOGIN_SUCCESS
+    }
+}
+
+const onLoginFail = (message) => {
+    return {
+        type: actionTypes.AUTH_LOGIN_FAIL,
+        message
+    }
+}
+
+const onLogin = (email, password) => {
+    return dispatch => {
+
+    }
+}

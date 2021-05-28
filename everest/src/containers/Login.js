@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import uuid from 'react-uuid';
+import { connect } from 'react-redux';
 
 import { FormSection, FormContainer, FormGraphic } from '../hoc/FormLayout';
 import LoginForm from '../components/LoginForm';
+import * as actions from '../stores/actions/index';
 
-export default class Login extends Component {
+class Login extends Component {
 
     state = {
         // isAuthenticated: false
@@ -86,3 +88,17 @@ export default class Login extends Component {
         )
     }
 }
+
+const mapStateToProps = state => {
+    return {
+
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
