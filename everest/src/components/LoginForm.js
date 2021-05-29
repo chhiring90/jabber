@@ -22,7 +22,7 @@ const LoginForm = ({ loginData, changed, submit }) => {
         .reduce((acc, el) => acc.concat(el), []);
 
     return (
-        <Form onSubmit={submit}>
+        <Form submit={submit}>
             <FormTitle
                 title="Log In"
                 link="/signup"

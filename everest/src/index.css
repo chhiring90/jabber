@@ -26,3 +26,9 @@
         @apply transition rounded text-brand-primary border-brand-gray-100 border-2 focus:ring-brand-primary focus:ring-offset-1 ring-opacity-70;
     }
 }
+
+@layer utilities {
+    .border-l-white {
+        border-left-color: rgba(225, 225, 225, 0.6);
+    }
+}

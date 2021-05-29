@@ -61,6 +61,9 @@ class Login extends Component {
 
     formSubmitHandler = (event) => {
         event.preventDefault();
+
+        const { email, password } = this.state.formData;
+        this.props.onLogin(email.value, password.value);
     }
 
     inputChangeHandler = (event, controlName) => {
@@ -81,7 +84,8 @@ class Login extends Component {
                 <FormContainer>
                     <LoginForm
                         changed={this.inputChangeHandler}
-                        loginData={this.state.formData} />
+                        loginData={this.state.formData}
+                        submit={this.formSubmitHandler} />
                 </FormContainer>
                 <FormGraphic></FormGraphic>
             </FormSection>
@@ -91,14 +95,15 @@ class Login extends Component {
 
 const mapStateToProps = state => {
     return {
-
+        isLoading: state.auth.loading,
+        error: state.auth.error
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-
+        onLogin: (email, password) => dispatch(actions.login(email, password))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

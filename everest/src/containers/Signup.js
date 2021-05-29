@@ -5,6 +5,7 @@ import uuid from 'react-uuid';
 import { FormSection, FormContainer, FormGraphic } from '../hoc/FormLayout';
 import SignupForm from '../components/SignupForm';
 import * as actions from '../stores/actions/index';
+import { updateObject } from '../shared/utilty';
 
 class SignUp extends Component {
 
@@ -77,10 +78,24 @@ class SignUp extends Component {
         }
     }
 
+    // clearInputValues(state) {
+    //     const prevFormData = { ...state.formData };
+    //     const emptyValues = Object.keys(prevFormData)
+    //         .map(key => {
+    //             ...prevFormData[key], 
+    //             [key].value: ''}
+    //             );
+
+    //     this.setState({ formData: emptyValues });
+    // }
+
     onSubmitHandler = (event) => {
         event.preventDefault();
         const { name, email, password, passwordConfirm } = this.state.formData;
+        console.log({ name, email, password, passwordConfirm });
         this.props.onSignUp(name.value, email.value, password.value, passwordConfirm.value);
+
+        this.clearInputValues(this.state);
     }
 
     inputChangeHandler = (event, controlName) => {
@@ -96,15 +111,20 @@ class SignUp extends Component {
         this.setState({ formData: updateControls });
     };
 
+    componentWillUnmount() {
+        // this.clearInputValues(this.state);
+    }
+
     render() {
-        console.log(this.props.isAuthenticated);
         return (
             <FormSection>
                 <FormContainer>
                     <SignupForm
                         changed={this.inputChangeHandler}
                         signupData={this.state.formData}
-                        submit={this.onSubmitHandler} />
+                        submit={this.onSubmitHandler}
+                        isLoading={this.props.isLoading}
+                        message={this.props.message} />
                 </FormContainer>
                 <FormGraphic></FormGraphic>
             </FormSection>
@@ -114,9 +134,10 @@ class SignUp extends Component {
 
 const mapStateToProps = state => {
     return {
-        loading: state.auth.loading,
+        isLoading: state.auth.loading,
         error: state.auth.error,
-        isAuthenticated: state.auth.isAuthenticated
+        isAuthenticated: state.auth.isAuthenticated,
+        message: state.auth.message
     }
 }
 

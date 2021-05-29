@@ -1,45 +1,51 @@
 import * as actionTypes from './actionTypes';
 import axios from 'axios';
 
-export const signupStart = () => {
+const signupStart = () => {
     return {
-        type: actionTypes.AUTH_SIGNUP_START
+        type: actionTypes.AUTH_SIGNUP_START,
     }
 };
 
-export const signupSuccess = () => {
+const signupSuccess = (message) => {
     return {
-        type: actionTypes.AUTH_SIGNUP_SUCCESS
+        type: actionTypes.AUTH_SIGNUP_SUCCESS,
+        message: [actionTypes.MESSAGE_SUCCESS, message]
     }
 };
 
-export const signupFail = (message) => {
+const signupFail = (message) => {
     return {
         type: actionTypes.AUTH_SIGNUP_FAIL,
-        message
+        message: [actionTypes.MESSAGE_ERROR, message]
     }
 };
 
 export const signup = (name, email, password, passwordConfirm) => {
-    return dispatch => {
-        dispatch(signupStart);
-        const signupData = {
-            name,
-            email,
-            password,
-            passwordConfirm
-        }
-
-        const url = 'http://127.0.0.1:5000/api/v1/users/signup';
-        axios({
-            method: 'POST',
-            url,
-            data: signupData
-        }).then(res => {
-            if (res.data.status === 'success') {
-                dispatch(signupSuccess);
+    return async dispatch => {
+        try {
+            dispatch(signupStart());
+            // debugger;
+            const signupData = {
+                name,
+                email,
+                password,
+                passwordConfirm
             }
-        }).catch(err => signupFail(err.response.data.message));
+            const url = 'http://127.0.0.1:5000/api/v1/users/signup';
+            const res = await axios({
+                method: 'POST',
+                url,
+                data: signupData
+            });
+
+            if (res.data.status === 'success') {
+                dispatch(signupSuccess('Sign up Successfully!'));
+            }
+        } catch (err) {
+            console.log(err.response.data.message);
+            dispatch(signupFail(err.response.data.message));
+        }
     }
 }
 
@@ -62,8 +68,28 @@ const onLoginFail = (message) => {
     }
 }
 
-const onLogin = (email, password) => {
-    return dispatch => {
+export const login = (email, password) => {
+    return async dispatch => {
+        try {
+            dispatch(onLoginStart());
+            const loginData = {
+                email,
+                password
+            }
 
+            const url = 'http://127.0.0.1:5000/api/v1/users/login';
+            const res = await axios({
+                method: 'POST',
+                url,
+                data: loginData
+            });
+
+            if (res.data.status === 'success') {
+                dispatch(onLoginSuccess());
+            }
+        } catch (err) {
+            console.log(err.response.data.message);
+            dispatch(onLoginFail(err.response.data.message));
+        }
     }
 }
