@@ -21,11 +21,30 @@ const signupFail = (message) => {
     }
 };
 
+const onLoginStart = () => {
+    return {
+        type: actionTypes.AUTH_LOGIN_START
+    }
+}
+
+const onLoginSuccess = (message) => {
+    return {
+        type: actionTypes.AUTH_LOGIN_SUCCESS,
+        message: [actionTypes.MESSAGE_SUCCESS, message]
+    }
+}
+
+const onLoginFail = (message) => {
+    return {
+        type: actionTypes.AUTH_LOGIN_FAIL,
+        message: [actionTypes.MESSAGE_ERROR, message]
+    }
+}
+
 export const signup = (name, email, password, passwordConfirm) => {
     return async dispatch => {
         try {
             dispatch(signupStart());
-            // debugger;
             const signupData = {
                 name,
                 email,
@@ -49,25 +68,6 @@ export const signup = (name, email, password, passwordConfirm) => {
     }
 }
 
-const onLoginStart = () => {
-    return {
-        type: actionTypes.AUTH_LOGIN_START
-    }
-}
-
-const onLoginSuccess = () => {
-    return {
-        type: actionTypes.AUTH_LOGIN_SUCCESS
-    }
-}
-
-const onLoginFail = (message) => {
-    return {
-        type: actionTypes.AUTH_LOGIN_FAIL,
-        message
-    }
-}
-
 export const login = (email, password) => {
     return async dispatch => {
         try {
@@ -85,7 +85,7 @@ export const login = (email, password) => {
             });
 
             if (res.data.status === 'success') {
-                dispatch(onLoginSuccess());
+                dispatch(onLoginSuccess('Login successfully!'));
             }
         } catch (err) {
             console.log(err.response.data.message);

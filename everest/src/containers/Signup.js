@@ -95,15 +95,17 @@ class SignUp extends Component {
         console.log({ name, email, password, passwordConfirm });
         this.props.onSignUp(name.value, email.value, password.value, passwordConfirm.value);
 
-        this.clearInputValues(this.state);
+        // this.clearInputValues(this.state);
     }
 
     inputChangeHandler = (event, controlName) => {
+        const isCheckGroup = ['checkbox', 'radio'].includes(event.target.type);
+
         const updateControls = {
             ...this.state.formData,
             [controlName]: {
                 ...this.state.formData[controlName],
-                value: event.target.value,
+                value: isCheckGroup ? event.target.checked : event.target.value,
                 // valid: checkValid
             }
         }

@@ -46,7 +46,8 @@ class Login extends Component {
                 key: `${uuid()}`,
                 elementType: 'input',
                 label: 'Remember me',
-                value: '',
+                value: false,
+                checked: true,
                 elementConfig: {
                     type: 'checkbox',
                     id: 'checkbox',
@@ -67,11 +68,16 @@ class Login extends Component {
     }
 
     inputChangeHandler = (event, controlName) => {
+        const isCheckGroup = ['checkbox', 'radio'].includes[event.target.type];
+        let checkboxValue = event.target.checked ? 'true' : 'false';
+
+        let value = isCheckGroup ? checkboxValue : event.target.value;
+
         const updateControls = {
             ...this.state.formData,
             [controlName]: {
                 ...this.state.formData[controlName],
-                value: event.target.value
+                value
             }
         };
 
@@ -85,7 +91,9 @@ class Login extends Component {
                     <LoginForm
                         changed={this.inputChangeHandler}
                         loginData={this.state.formData}
-                        submit={this.formSubmitHandler} />
+                        submit={this.formSubmitHandler}
+                        message={this.props.message}
+                        isLoading={this.props.isLoading} />
                 </FormContainer>
                 <FormGraphic></FormGraphic>
             </FormSection>
@@ -96,7 +104,8 @@ class Login extends Component {
 const mapStateToProps = state => {
     return {
         isLoading: state.auth.loading,
-        error: state.auth.error
+        error: state.auth.error,
+        message: state.auth.message
     }
 }
 

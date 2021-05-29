@@ -48,13 +48,14 @@ const authLoginStart = (state, action) => {
 const authLoginSuccess = (state, action) => {
     return updateObject(state, {
         isAuthenticated: true,
-        loading: false
+        loading: false,
+        message: action.message,
     });
 }
 
 const authLoginFail = (state, action) => {
     return updateObject(state, {
-        error: action.message,
+        message: action.message,
         loading: false
     });
 }

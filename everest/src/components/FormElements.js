@@ -12,3 +12,22 @@ export const Form = ({ children, submit }) => (
         {children}
     </form>
 );
+
+export const FormMessage = ({ message }) => {
+    let messageClassName;
+
+    switch (message[0]) {
+        case 'MESSAGE_SUCCESS':
+            messageClassName = 'text-green-400';
+            break;
+        case 'MESSAGE_ERROR':
+            messageClassName = 'text-red-400';
+            break;
+        case 'MESSAGE_INFO':
+            messageClassName = 'text-blue-500';
+            break;
+        default: break;
+    }
+
+    return (<p className={`${messageClassName} text-sm font-bold mb-3`}>{message[1]}</p>)
+}

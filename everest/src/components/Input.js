@@ -9,6 +9,7 @@ const Input = ({ elementType, changed, value, options, elementConfig, require, l
                 className={['checkbox', 'radio'].includes(elementConfig.type) ? 'order-1' : ''}
                 {...elementConfig}
                 value={value}
+                checked={value}
                 onChange={changed}
                 required={require ? true : ''} />;
             break;

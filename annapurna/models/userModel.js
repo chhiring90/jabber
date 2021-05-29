@@ -66,7 +66,10 @@ userSchema.pre('save', async function (next) {
 });
 
 userSchema.methods.passwordCorrect = async function (candidatePassword, userPassword) {
-    return await bcrypt.compare(candidatePassword, userPassword);
+    console.log(candidatePassword, userPassword);
+    const checked = await bcrypt.compare(candidatePassword, userPassword);
+    console.log(checked);
+    return checked;
 }
 
 userSchema.methods.passwordChangedAfter = function (jwtTimestamp) {
