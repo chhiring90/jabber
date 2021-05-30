@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { FormSection, FormContainer, FormGraphic } from '../hoc/FormLayout';
 import LoginForm from '../components/LoginForm';
 import * as actions from '../stores/actions/index';
+import { checkValidation } from '../shared/utilty';
 
 class Login extends Component {
 
@@ -25,7 +26,9 @@ class Login extends Component {
                 validation: {
                     require: true,
                     isEmail: true
-                }
+                },
+                valid: false,
+                touched: false
             },
             password: {
                 key: `${uuid()}`,
@@ -40,7 +43,10 @@ class Login extends Component {
                 },
                 validation: {
                     require: true,
-                }
+                    minLength: 8
+                },
+                valid: false,
+                touched: false
             },
             checkbox: {
                 key: `${uuid()}`,
@@ -55,7 +61,9 @@ class Login extends Component {
                 },
                 validation: {
                     require: false,
-                }
+                },
+                valid: false,
+                touched: false
             }
         }
     }
@@ -77,7 +85,9 @@ class Login extends Component {
             ...this.state.formData,
             [controlName]: {
                 ...this.state.formData[controlName],
-                value
+                value,
+                valid: checkValidation(event.target.value, this.state.formData[controlName].validation),
+                touched: true
             }
         };
 

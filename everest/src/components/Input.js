@@ -1,17 +1,34 @@
 import React from 'react';
 import uuid from 'react-uuid';
 
-const Input = ({ elementType, changed, value, options, elementConfig, require, label }) => {
+const Input = ({ elementType, changed, value, options, elementConfig, label, shouldValidate, invalid, touched }) => {
     let inputElement = null;
+    let inputClasses = [];
+
+    // console.log(invalid && shouldValidate && touched, {
+    //     invalid, shouldValidate, touched
+    // }, label)
+
+    if (invalid && shouldValidate && touched) {
+        inputClasses.push('focus:ring-red-400 focus:border-red-400');
+    }
+
+    if (['checkbox', 'radio'].includes(elementConfig.type)) {
+        inputClasses.push('order-1');
+    }
+
+    if (!invalid) {
+        inputClasses.push('focus:ring-green-400 focus:border-green-400');
+    }
+
     switch (elementType) {
         case 'input':
             inputElement = <input
-                className={['checkbox', 'radio'].includes(elementConfig.type) ? 'order-1' : ''}
+                className={inputClasses.join(' ')}
                 {...elementConfig}
                 value={value}
                 checked={value}
-                onChange={changed}
-                required={require ? true : ''} />;
+                onChange={changed} />;
             break;
         case 'select':
             inputElement = (

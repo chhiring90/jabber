@@ -23,7 +23,7 @@ const sendErrorProd = (err, res) => {
         status: err.status,
         message: 'Something went very wrong'
     });
-}
+};
 
 module.exports = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500;
@@ -34,4 +34,4 @@ module.exports = (err, req, res, next) => {
     } else {
         sendErrorProd(err, res);
     }
-}
+};

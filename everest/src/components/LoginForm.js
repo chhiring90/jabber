@@ -17,6 +17,9 @@ const LoginForm = ({ loginData, changed, submit, message, isLoading }) => {
                         label={input.label}
                         elementConfig={input.elementConfig}
                         require={true}
+                        invalid={!input.valid}
+                        shouldValidate={input.validation}
+                        touched={input.touched}
                         value={input.value}
                         changed={(event) => changed(event, key)}
                     />

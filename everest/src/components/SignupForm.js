@@ -2,6 +2,7 @@ import Input from './Input';
 import Button from './Button';
 import { FormTitle, Form, FormMessage } from './FormElements';
 import Spinner from './Spinner';
+import { checkValidation } from '../shared/utilty';
 
 const SignupForm = ({ submit, signupData, changed, isLoading, message }) => {
     const transformedLoginData = Object.keys(signupData)
@@ -12,7 +13,10 @@ const SignupForm = ({ submit, signupData, changed, isLoading, message }) => {
                     elementType={input.elementType}
                     elementConfig={input.elementConfig}
                     label={input.label}
+                    invalid={!input.valid}
                     require={input.require}
+                    shouldValidate={input.validation}
+                    touched={input.touched}
                     changed={event => changed(event, key)} />)
         })
         .reduce((acc, el) => acc.concat(el), []);

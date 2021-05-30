@@ -5,7 +5,7 @@ import uuid from 'react-uuid';
 import { FormSection, FormContainer, FormGraphic } from '../hoc/FormLayout';
 import SignupForm from '../components/SignupForm';
 import * as actions from '../stores/actions/index';
-import { updateObject } from '../shared/utilty';
+import { updateObject, checkValidation } from '../shared/utilty';
 
 class SignUp extends Component {
 
@@ -24,8 +24,10 @@ class SignUp extends Component {
                     name: 'name',
                 },
                 validation: {
-                    require: true,
+                    required: true,
                 },
+                valid: false,
+                touched: false
             },
             email: {
                 key: `${uuid()}`,
@@ -39,9 +41,11 @@ class SignUp extends Component {
                     name: 'email',
                 },
                 validation: {
-                    require: true,
+                    required: true,
                     isEmail: true
-                }
+                },
+                valid: false,
+                touched: false
             },
             password: {
                 key: `${uuid()}`,
@@ -55,9 +59,11 @@ class SignUp extends Component {
                     name: 'password'
                 },
                 validation: {
-                    require: true,
+                    required: true,
                     minLength: 8
                 },
+                valid: false,
+                touched: false
             },
             passwordConfirm: {
                 key: `${uuid()}`,
@@ -71,9 +77,11 @@ class SignUp extends Component {
                     type: 'password',
                 },
                 validation: {
-                    require: true,
+                    required: true,
                     minLength: 8
-                }
+                },
+                valid: false,
+                touched: false
             }
         }
     }
@@ -106,7 +114,8 @@ class SignUp extends Component {
             [controlName]: {
                 ...this.state.formData[controlName],
                 value: isCheckGroup ? event.target.checked : event.target.value,
-                // valid: checkValid
+                valid: checkValidation(event.target.value, this.state.formData[controlName].validation),
+                touched: true
             }
         }
 
