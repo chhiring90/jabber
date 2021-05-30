@@ -100,7 +100,6 @@ class SignUp extends Component {
     onSubmitHandler = (event) => {
         event.preventDefault();
         const { name, email, password, passwordConfirm } = this.state.formData;
-        console.log({ name, email, password, passwordConfirm });
         this.props.onSignUp(name.value, email.value, password.value, passwordConfirm.value);
 
         // this.clearInputValues(this.state);
