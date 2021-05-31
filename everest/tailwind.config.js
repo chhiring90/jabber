@@ -21,7 +21,13 @@ module.exports = {
         quicksand: "'Quicksand', sans-serif"
       },
       minHeight: {
-        '2xl': '665px'
+        '2xl': '665px',
+      },
+      maxWidth: {
+        nav: '290px',
+      },
+      boxShadow: {
+        nav: '16px 10px 25px 0 rgba(86,128,248,0.03), 35px 10px 70px 0 rgba(86,128,248,0.05), 24px 6px 70px 0px rgba(0,0,0,0.02)'
       }
     },
   },
