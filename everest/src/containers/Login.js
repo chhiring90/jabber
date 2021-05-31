@@ -3,7 +3,7 @@ import uuid from 'react-uuid';
 import { connect } from 'react-redux';
 
 import { FormSection, FormContainer, FormGraphic } from '../hoc/FormLayout';
-import LoginForm from '../components/LoginForm';
+import AuthForm from '../components/AuthForm';
 import * as actions from '../stores/actions/index';
 import { checkValidation } from '../shared/utilty';
 
@@ -65,7 +65,14 @@ class Login extends Component {
                 valid: false,
                 touched: false
             }
-        }
+        },
+        formTitle: {
+            title: 'Log In',
+            link: '/signup',
+            linkContent: "Create an account",
+            children: 'Not registered yet ? '
+        },
+        isLoginForm: true
     }
 
     formSubmitHandler = (event) => {
@@ -80,7 +87,6 @@ class Login extends Component {
         let checkboxValue = event.target.checked ? 'true' : 'false';
 
         let value = isCheckGroup ? checkboxValue : event.target.value;
-
         const updateControls = {
             ...this.state.formData,
             [controlName]: {
@@ -98,12 +104,14 @@ class Login extends Component {
         return (
             <FormSection>
                 <FormContainer>
-                    <LoginForm
+                    <AuthForm
                         changed={this.inputChangeHandler}
-                        loginData={this.state.formData}
+                        formData={this.state.formData}
                         submit={this.formSubmitHandler}
                         message={this.props.message}
-                        isLoading={this.props.isLoading} />
+                        isLoading={this.props.isLoading}
+                        formTitle={this.state.formTitle}
+                        isLoginForm={this.state.isLoginForm} />
                 </FormContainer>
                 <FormGraphic></FormGraphic>
             </FormSection>

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import uuid from 'react-uuid';
 
 import { FormSection, FormContainer, FormGraphic } from '../hoc/FormLayout';
-import SignupForm from '../components/SignupForm';
+import AuthForm from '../components/AuthForm';
 import * as actions from '../stores/actions/index';
 import { updateObject, checkValidation } from '../shared/utilty';
 
@@ -83,6 +83,12 @@ class SignUp extends Component {
                 valid: false,
                 touched: false
             }
+        },
+        formTitle: {
+            title: 'Create Account',
+            link: '/login',
+            linkContent: "Login",
+            children: 'Already have an account ? '
         }
     }
 
@@ -129,12 +135,13 @@ class SignUp extends Component {
         return (
             <FormSection>
                 <FormContainer>
-                    <SignupForm
+                    <AuthForm
                         changed={this.inputChangeHandler}
-                        signupData={this.state.formData}
+                        formData={this.state.formData}
                         submit={this.onSubmitHandler}
                         isLoading={this.props.isLoading}
-                        message={this.props.message} />
+                        message={this.props.message}
+                        formTitle={this.state.formTitle} />
                 </FormContainer>
                 <FormGraphic></FormGraphic>
             </FormSection>

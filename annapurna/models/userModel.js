@@ -70,7 +70,6 @@ userSchema.pre('save', async function (next) {
     if (!this.isModified('password') || this.isNew) return next();
 
     this.passwordChangedAt = Date.now() - 1000;
-    console.log(this.passwordChangedAt);
     next();
 });
 
@@ -92,8 +91,6 @@ userSchema.methods.createPasswordResetToken = function () {
 
     const tenMinutes = 10 * 60 * 1000;
     this.passwordResetExpires = Date.now() + tenMinutes;
-    console.log(new Date(Date.now()));
-    console.log(new Date(Date.now() + tenMinutes));
 
     return resetToken;
 };
