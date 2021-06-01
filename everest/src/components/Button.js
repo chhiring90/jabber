@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Button = ({ children, buttonType, type, disabled }) => {
+const Button = ({ children, buttonType, type, disabled, customClass }) => {
     let buttonElement = null;
     let classes = 'bg-brand-primary inline-flex justify-center items-center text-center px-2 text-white font-semibold tracking-widest py-4 w-full rounded transition focus:ring-2 focus:ring-brand-primary focus:ring-opacity-70 focus:outline-none ring-offset-2 hover:bg-opacity-90 active:bg-brand-tertiary active:bg-opacity-70';
     switch (buttonType) {
@@ -10,7 +10,9 @@ const Button = ({ children, buttonType, type, disabled }) => {
         case 'button':
             buttonElement = <button disabled={disabled} className={classes} type={type}>{children}</button>;
             break;
-        default: break;
+        default:
+            buttonElement = <button disabled={disabled} className={customClass} type={type}>{children}</button>;
+            break;
     }
     return buttonElement;
 }

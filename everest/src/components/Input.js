@@ -5,10 +5,6 @@ const Input = ({ elementType, changed, value, options, elementConfig, label, sho
     let inputElement = null;
     let inputClasses = [];
 
-    // console.log(invalid && shouldValidate && touched, {
-    //     invalid, shouldValidate, touched
-    // }, label)
-
     if (invalid && shouldValidate && touched) {
         inputClasses.push('focus:ring-red-400 focus:border-red-400');
     }

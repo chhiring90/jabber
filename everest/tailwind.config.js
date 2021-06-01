@@ -27,13 +27,18 @@ module.exports = {
         nav: '290px',
       },
       boxShadow: {
-        nav: '16px 10px 25px 0 rgba(86,128,248,0.03), 35px 10px 70px 0 rgba(86,128,248,0.05), 24px 6px 70px 0px rgba(0,0,0,0.02)'
+        nav: '16px 10px 25px 0 rgba(86,128,248,0.03), 35px 10px 70px 0 rgba(86,128,248,0.05), 24px 6px 70px 0px rgba(0,0,0,0.02)',
+        navlink: '1px 0 10px rgba(42, 139, 242, 0.45), 0 0 10px rgba(42, 139, 242, 0.55), 4px 0 25px rgba(42, 139, 242, 0.75)'
+      },
+      flex: {
+        full: '0 0 100%'
       }
     },
   },
   variants: {
     extend: {
       backgroundColor: ['active'],
+      textColor: ['active']
     },
   },
   plugins: [
