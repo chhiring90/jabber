@@ -3,13 +3,14 @@ import { NavLink } from 'react-router-dom';
 
 const NavbarItem = ({ link, children }) => {
     let [isActive, setIsActive] = useState(false);
+    let currentLocation = window.location.pathname;
 
     useEffect(() => {
-        if (link === window.location.pathname) {
+        if (link === currentLocation) {
             setIsActive(true);
         }
         return () => setIsActive(false);
-    });
+    }, [currentLocation]);
 
     return (
         <li className="mb-5">

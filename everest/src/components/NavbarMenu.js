@@ -5,7 +5,7 @@ import NavbarItem from './NavbarItem';
 
 const NavbarMenu = () => {
     return (
-        <ul className="py-6 flex-full">
+        <ul className="py-6 w-full">
             <NavbarItem link="/"><AiFillHome className="mr-2" />Home</NavbarItem>
             <NavbarItem link="/discover"><AiFillCompass className="mr-2" />Discover</NavbarItem>
             <NavbarItem link="/chats"><AiFillWechat className="mr-2" />Chats</NavbarItem>
