@@ -2,13 +2,33 @@ import React, { Component } from 'react';
 
 import Chat from '../components/Chat';
 import Button from '../components/Button';
-import { AiOutlinePlus } from 'react-icons/ai';
+import Input from '../components/Input';
+import { AiOutlinePlus, AiOutlineSearch } from 'react-icons/ai';
 
 class Chats extends Component {
+
+    state = {
+        searchbar: {
+            elementType: 'input',
+            value: '',
+            elementConfig: {
+                type: 'text',
+                id: 'search-bar',
+                name: 'search-bar',
+                placeholder: 'Search'
+            },
+            validation: {
+                require: false,
+            },
+            valid: false,
+            touched: false
+        }
+    }
+
     render() {
         return (
             <>
-                <div className="flex mb-5">
+                <div className="flex mb-1 flex-wrap">
                     <div className="flex-auto w-3/5 font-semibold tracking-wider">
                         <h2 className="text-4xl font-bold">Chats</h2>
                         <p>Recent Chats</p>
@@ -19,6 +39,22 @@ class Chats extends Component {
                             Create New Room
                         </Button>
                     </div>
+                    <form className="w-full flex flex-full pt-5">
+                        <Input
+                            additionalClass="h-16 text-lg px-5 shadow-chat"
+                            elementType={this.state.searchbar.elementType}
+                            value={this.state.searchbar.value}
+                            elementConfig={this.state.searchbar.elementConfig}
+                            shouldValidate={this.state.searchbar.elementType}
+                            invalid={!this.state.searchbar.valid}
+                            touched={this.state.searchbar.touched}
+                        />
+                        <div className="flex mb-4 pl-2">
+                            <Button customClass="shadow-chat bg-brand-primary focus:outline-none text-white h-16 bg-white rounded-md px-5 py-4 text-lg">
+                                <AiOutlineSearch className="w-7 h-7" />
+                            </Button>
+                        </div>
+                    </form>
                 </div>
                 <Chat />
                 <Chat />

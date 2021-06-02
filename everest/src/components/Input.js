@@ -1,7 +1,7 @@
 import React from 'react';
 import uuid from 'react-uuid';
 
-const Input = ({ elementType, changed, value, options, elementConfig, label, shouldValidate, invalid, touched }) => {
+const Input = ({ elementType, changed, value, options, elementConfig, label, shouldValidate, invalid, touched, additionalClass }) => {
     let inputElement = null;
     let inputClasses = [];
 
@@ -17,6 +17,10 @@ const Input = ({ elementType, changed, value, options, elementConfig, label, sho
         inputClasses.push('focus:ring-green-400 focus:border-green-400');
     }
 
+    if (additionalClass) {
+        inputClasses.push(additionalClass);
+    }
+
     switch (elementType) {
         case 'input':
             inputElement = <input
@@ -24,7 +28,8 @@ const Input = ({ elementType, changed, value, options, elementConfig, label, sho
                 {...elementConfig}
                 value={value}
                 checked={value}
-                onChange={changed} />;
+                onChange={changed}
+            />;
             break;
         case 'select':
             inputElement = (

@@ -9,8 +9,8 @@ function App() {
 	return (
 		<>
 			<Switch>
-				<Route path="/" component={UserDashboard} />
-				<Route path="/signup" exact component={SignUp} />
+				<Route path="/" exact component={UserDashboard} />
+				<Route path="/signup" component={SignUp} />
 				<Route path="/login" component={Login} />
 			</Switch>
 		</>

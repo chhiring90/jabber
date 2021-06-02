@@ -10,7 +10,7 @@ const NavbarItem = ({ link, children }) => {
             setIsActive(true);
         }
         return () => setIsActive(false);
-    }, [currentLocation]);
+    }, [currentLocation, link]);
 
     return (
         <li className="mb-5">
@@ -19,7 +19,8 @@ const NavbarItem = ({ link, children }) => {
                 to={link}>
                 {isActive ?
                     <span
-                        className="bg-brand-primary inset-y-0 left-0 transition rounded-xl absolute block w-1 h-12 shadow-navlink"></span>
+                        className="bg-brand-primary inset-y-0 left-0 transition rounded-xl absolute block w-1 h-full shadow-navlink">
+                    </span>
                     : null}
                 {children}
             </NavLink>

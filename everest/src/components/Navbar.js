@@ -11,7 +11,7 @@ const Navbar = () => {
             <Avatar size="large" name={'Henry Jabbawockiez'} />
             <NavbarMenu />
             <div className="mt-auto w-full">
-                <Button customClass="flex justify-center text-lg tracking-wider items-center py-5 font-bold px-4 text-center text-brand-gray uppercase hover:text-brand-primary focus:text-brand-primary active:text-brand-primary transition">
+                <Button customClass="w-full flex justify-center text-lg tracking-wider items-center py-5 font-bold px-4 text-center text-brand-gray uppercase hover:text-brand-primary focus:outline-none focus:text-brand-primary active:text-brand-primary transition">
                     <AiOutlinePoweroff className="mr-2" />
                 Logout
             </Button>
