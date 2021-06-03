@@ -12,7 +12,8 @@ module.exports = {
           gray: '#707C97',
           'gray-100': '#E6ECFE',
           'gray-200': '#FAFBFF',
-          'gray-300': '#F3F3FB'
+          'gray-300': '#F3F3FB',
+          'gray-400': 'rgba(112, 124, 151, 0.1)'
         }
       },
       fontFamily: {
@@ -31,7 +32,8 @@ module.exports = {
       boxShadow: {
         nav: '16px 10px 25px 0 rgba(86,128,248,0.03), 35px 10px 70px 0 rgba(86,128,248,0.05), 24px 6px 70px 0px rgba(0,0,0,0.02)',
         navlink: '1px 0 10px rgba(42, 139, 242, 0.45), 0 0 10px rgba(42, 139, 242, 0.55), 4px 0 25px rgba(42, 139, 242, 0.75)',
-        chat: '0 7px 12px rgb(0,0,0, 0.01), 0 0 12px 0px rgb(0,0,0,0.08), -1px 0 5px rgb(0,0,0,0.01)'
+        chat: '0 7px 12px rgb(0,0,0, 0.01), 0 0 12px 0px rgb(0,0,0,0.08), -1px 0 5px rgb(0,0,0,0.01)',
+        message: '0 10px 55px rgba(0, 0, 0, 0.05), 0 4px 10px rgba(0, 0, 0, 0.02), 0 10px 25px rgba(0, 0, 0, 0.05)'
       },
       flex: {
         full: '0 0 100%'

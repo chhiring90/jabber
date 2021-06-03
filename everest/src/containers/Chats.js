@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import SimpleBar from 'simplebar-react';
+import 'simplebar/dist/simplebar.min.css';
 
 import Chat from '../components/Chat';
 import Button from '../components/Button';
@@ -33,14 +35,15 @@ class Chats extends Component {
                         <h2 className="text-4xl font-bold">Chats</h2>
                         <p>Recent Chats</p>
                     </div>
-                    <div className="flex-auto w-2/5">
-                        <Button buttonType="button">
+                    <div className="flex-auto w-3/12">
+                        <Button buttonType="button" >
                             <AiOutlinePlus className="mr-2 w-5 h-5" />
-                            Create New Room
+                            New Room
                         </Button>
                     </div>
                     <form className="w-full flex flex-full pt-5">
                         <Input
+                            changed={(e) => e.target.value}
                             additionalClass="h-16 text-lg px-5 shadow-chat"
                             elementType={this.state.searchbar.elementType}
                             value={this.state.searchbar.value}
@@ -56,10 +59,12 @@ class Chats extends Component {
                         </div>
                     </form>
                 </div>
-                <Chat />
-                <Chat />
-                <Chat />
-                <Chat />
+                <SimpleBar className="max-height">
+                    <Chat status="online" />
+                    <Chat stauts="recentlyOnline" />
+                    <Chat stauts="recentlyOnline" />
+                    <Chat stauts="recentlyOnline" />
+                </SimpleBar>
             </>
         )
     }

@@ -3,7 +3,7 @@ const AnimatingDots = () => {
     const dots = [...dotSize]
         .map((_, index) => <span
             key={index}
-            className={`block border-2 animation-delay-${index + 1} border-white rounded-full w-2 h-2 bg-brand-primary animate-bounce`}></span >);
+            className={`block border-2 border-white animation-delay-${index + 1} rounded-full w-2 h-2 bg-brand-primary animate-bounce`}></span >);
 
     return <span className="inline-flex mr-1 items-center">{dots}</span>;
 }

@@ -22,7 +22,7 @@ const UserStatusDot = ({ status }) => {
             <span className={`absolute inline-flex h-3 w-3 rounded-full delay-300 opacity-75 ${statusColor.join(' ')}`}></span>
             <span className={`border-transparent border-2 relative delay-300 inline-flex rounded-full h-3 w-3 ${statusColor.join(' ')}`}></span>
         </span>
-    )
-}
+    );
+};
 
 export default UserStatusDot;
