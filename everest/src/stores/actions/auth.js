@@ -104,7 +104,7 @@ export const checkAuthState = ()=> {
                 url,
             });
 
-            console.log(res);
+            console.log(res.cookies);
         }catch (err){
             console.log(err.response.data.message);
         }
