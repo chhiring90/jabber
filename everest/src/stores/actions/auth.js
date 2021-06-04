@@ -93,3 +93,20 @@ export const login = (email, password) => {
         }
     }
 }
+
+export const checkAuthState = ()=> {
+    return async dispatch => {
+        const url = 'http://127.0.0.1:5000/api/v1/users/authorize';
+
+        try {
+            const res = await axios({
+                method: 'GET',
+                url,
+            });
+
+            console.log(res);
+        }catch (err){
+            console.log(err.response.data.message);
+        }
+    }
+}
