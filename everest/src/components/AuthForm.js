@@ -20,13 +20,15 @@ const AuthForm = ({ submit, formData, changed, isLoading, message, formTitle, is
                     require={input.require}
                     shouldValidate={input.validation}
                     touched={input.touched}
-                    changed={event => changed(event, key)} />)
+                    changed={event => changed(event, key)}
+                    fullWidth={true} />)
         })
         .reduce((acc, el) => acc.concat(el), []);
 
     return (
         <form
-            onSubmit={(event) => submit(event)}>
+            onSubmit={(event) => submit(event)}
+            className="w-full">
             <FormTitle formTitle={formTitle} />
             {message && <FormMessage message={message} />}
             {form}

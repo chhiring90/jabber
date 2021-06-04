@@ -48,3 +48,7 @@
         resize: none;
     }
 }
+
+.simplebar-content {
+    height: 100%;
+}

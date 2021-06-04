@@ -30,7 +30,7 @@ class Chats extends Component {
     render() {
         return (
             <>
-                <div className="flex mb-1 flex-wrap">
+                <div className="flex mb-5 flex-wrap">
                     <div className="flex-auto w-3/5 font-semibold tracking-wider">
                         <h2 className="text-4xl font-bold">Chats</h2>
                         <p>Recent Chats</p>
@@ -51,8 +51,9 @@ class Chats extends Component {
                             shouldValidate={this.state.searchbar.elementType}
                             invalid={!this.state.searchbar.valid}
                             touched={this.state.searchbar.touched}
+                            fullWidth={true}
                         />
-                        <div className="flex mb-4 pl-2">
+                        <div className="flex pl-2">
                             <Button customClass="shadow-chat bg-brand-primary focus:outline-none text-white h-16 bg-white rounded-md px-5 py-4 text-lg">
                                 <AiOutlineSearch className="w-7 h-7" />
                             </Button>

@@ -10,7 +10,7 @@ const message = () => {
             <div className="flex items-start w-full max-w-xl mb-5">
                 <blockquote className="flex-auto justify-start flex">
                     <Avatar name="Nika Jerrardo" size="small" />
-                    <div className="bg-brand-primary flex-grow-0 rounded-tl-none rounded-xl py-4 px-4 text-white">
+                    <div className="bg-brand-primary flex-grow-0 shadow-message-alt rounded-tl-none rounded-xl py-4 px-4 text-white">
                         <p>
                             Hello! Finally found the time to write to you) I need your help in creating interactive animations for my mobile application.
                         </p>

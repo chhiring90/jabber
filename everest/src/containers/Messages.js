@@ -5,7 +5,8 @@ import 'simplebar/dist/simplebar.min.css';
 import Avatar from '../components/Avatar';
 import Message from '../components/Message';
 import Input from '../components/Input';
-import { AiOutlinePlus } from 'react-icons/ai';
+import { AiFillFileImage, AiOutlineSend } from 'react-icons/ai';
+import Button from '../components/Button';
 
 class Messages extends Component {
     state = {
@@ -14,7 +15,7 @@ class Messages extends Component {
             imageUpload: {
                 elementType: 'input',
                 value: '',
-                label: <AiOutlinePlus/>,
+                label: <AiFillFileImage className="w-6 h-6 text-white"/>,
                 elementConfig: {
                     id: 'image-upload',
                     name: 'image-upload',
@@ -44,22 +45,28 @@ class Messages extends Component {
     }
 
     render() {
-        let textareaClass = 'border-none rounded-none px-4 py-5 resize-none max-h-20 h-20 focus:ring-opacity-0 focus:ring-offset-0 font-semibold text-brand-gray -mb-4';
+        let inputClass = {
+            textarea: 'border-none rounded-none px-4 py-7 resize-none max-h-20 h-20 focus:ring-opacity-0 focus:ring-offset-0 font-semibold bg-white text-brand-gray',
+            file: {
+                wrap: 'flex-auto',
+            },
+        }
 
         return(
             <div className="flex flex-wrap w-100 shadow-message">
                 <div className="bg-brand-gray-200 border-brand-gray-400 border-b-2 flex-full px-6 pt-6 pb-3">
                     <Avatar size="medium" typing={false} name="Nika Jerrardo"/>
                 </div>
-                <SimpleBar className="flex-full max-h-chat p-5">
+                <SimpleBar className="flex-full h-message max-h-message p-5">
                     <Message />
                 </SimpleBar>
                 <div className="border-brand-gray-400 border-t-2 flex-full">
-                    <div className="flex flex-wrap">
+                    <form className="flex flex-wrap even:flex-grow-1 bg-white px-4">
                         {Object.keys(this.state.formData)
                         .map(key => [...Array(this.state.formData[key])].map(input => {
                             return <Input
-                            additionalClass={key === 'textarea' ? textareaClass : null}
+                            additionalWrapClass={key === 'textarea'? inputClass.file.wrap : null}
+                            additionalClass={key === 'textarea' ? inputClass.textarea : null}
                             elementType={input.elementType}
                             elementConfig={input.elementConfig}
                             label={input.label}
@@ -69,7 +76,12 @@ class Messages extends Component {
                             touched={input.touched}
                             changed={event => event.target.value} />}
                             ))}
-                    </div>
+                            <div className="flex items-center justify-center">
+                                <Button customClass="rounded-full shadow-send transform -rotate-45 bg-brand-primary flex justify-center align-center w-10 h-10 items-center focus:outline-none ">
+                                    <AiOutlineSend className="w-5 h-5 text-white" />
+                                </Button>
+                            </div>
+                    </form>
                 </div>
             </div>
         )
