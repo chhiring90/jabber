@@ -51,7 +51,7 @@ const avatar = ({ imageSrc, alt, size, name, status, typing }) => {
             break;
         case 'small':
             avatar = (
-                    <figure className="w-14">
+                    <figure className="w-14 flex-shrink-0">
                         <img className={`w-9 h-9 ${classes.avatar} mb-0`} src={userImage} alt={alt} />
                     </figure>
             );

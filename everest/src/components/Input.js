@@ -48,6 +48,7 @@ const Input = ({ elementType, changed, value, options, elementConfig, label, sho
         case 'textarea':
             inputElement = (
                 <textarea
+                    className={inputClasses.join(' ')}
                     {...elementConfig}
                     onChange={changed}>
                 </textarea>);
@@ -55,17 +56,16 @@ const Input = ({ elementType, changed, value, options, elementConfig, label, sho
         default: break;
     }
 
-    let typeIsInput = ['textarea', 'select'].includes(elementType);
 
     return (
         <div className="mb-4 w-full flex flex-wrap items-center">
-            {!typeIsInput && label &&
+            {label &&
                 <label
                     className={`inline-block leading-5 tracking-wider font-semibold text-brand-gray ${['checkbox', 'radio'].includes(elementConfig.type) ? 'order-2 mb-0 ml-2' : 'mb-2'}`}
                     htmlFor={elementConfig.id}>
                     {label}
                 </label>}
-            { inputElement}
+            {inputElement}
         </div >
     )
 };
