@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import SignUp from './containers/Signup';
@@ -9,18 +9,22 @@ import * as actions from './stores/actions/index';
 
 function App(props) {
 
-	useState(() => {
+	const [isAuth, setIsAuth] = useState(false);
 
+	useEffect(() => {
 		props.checkAuthState();
+		setIsAuth(props.isAuthenticated);
 
 		return () => {
-			props.checkAuthState();
+			if(!isAuth){
+				props.setAuthPathRedirect();
+			}
 		}
-	}, []);
+	}, [isAuth, props]);
 
 	let router;
 
-	if (props.isAuthenticated) {
+	if (isAuth) {
 		router = (
 			<Switch>
 				<Route path="/signup" component={SignUp} />
@@ -33,6 +37,7 @@ function App(props) {
 			<Switch>
 				<Route path="/signup" component={SignUp} />
 				<Route path="/login" component={Login} />
+				<Redirect to="/signup"/>
 			</Switch>
 		)
 	}
@@ -48,8 +53,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		checkAuthState: () => dispatch(actions.checkAuthState())
+		checkAuthState: () => dispatch(actions.checkAuthState()),
+		setAuthPathRedirect: () => dispatch(actions.setAuthPathRedirect()),
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

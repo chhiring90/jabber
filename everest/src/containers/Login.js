@@ -6,6 +6,7 @@ import { FormSection, FormContainer, FormGraphic } from '../hoc/FormLayout';
 import AuthForm from '../components/AuthForm';
 import * as actions from '../stores/actions/index';
 import { checkValidation } from '../shared/utilty';
+import { Redirect } from 'react-router';
 
 class Login extends Component {
 
@@ -100,22 +101,33 @@ class Login extends Component {
         this.setState({ formData: updateControls });
     }
 
+    componentDidMount() {
+        if (this.props.isAuthenticated && !['/signup', '/login'].includes(this.props.authRedirectPath)) {
+            this.props.setAuthPathRedirect();
+        }
+    }
+
     render() {
-        return (
-            <FormSection>
-                <FormContainer>
-                    <AuthForm
-                        changed={this.inputChangeHandler}
-                        formData={this.state.formData}
-                        submit={this.formSubmitHandler}
-                        message={this.props.message}
-                        isLoading={this.props.isLoading}
-                        formTitle={this.state.formTitle}
-                        isLoginForm={this.state.isLoginForm} />
-                </FormContainer>
-                <FormGraphic></FormGraphic>
-            </FormSection>
-        )
+        let renderComponent = (
+        <FormSection>
+            <FormContainer>
+                <AuthForm
+                    changed={this.inputChangeHandler}
+                    formData={this.state.formData}
+                    submit={this.formSubmitHandler}
+                    message={this.props.message}
+                    isLoading={this.props.isLoading}
+                    formTitle={this.state.formTitle}
+                    isLoginForm={this.state.isLoginForm} />
+            </FormContainer>
+            <FormGraphic></FormGraphic>
+        </FormSection>);
+
+        if (this.props.isAuthenticated && !['/signup', '/login'].includes(this.props.authRedirectPath)) {
+            renderComponent = <Redirect to={this.props.authRedirectPath} />
+        }
+        
+        return renderComponent;
     }
 }
 
@@ -123,13 +135,16 @@ const mapStateToProps = state => {
     return {
         isLoading: state.auth.loading,
         error: state.auth.error,
-        message: state.auth.message
+        message: state.auth.message,
+        authRedirectPath: state.auth.authRedirectPath,
+        isAuthenticated: state.auth.isAuthenticated,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onLogin: (email, password) => dispatch(actions.login(email, password))
+        onLogin: (email, password) => dispatch(actions.login(email, password)),
+        setAuthPathRedirect: () => dispatch(actions.setAuthPathRedirect())
     }
 }
 

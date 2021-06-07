@@ -12,39 +12,37 @@ class UserDashboard extends Component {
     componentDidMount() {
         if (!this.props.isAuthenticated) {
             this.pros.setAuthPathRedirect();
+            console.log('not auth');
         }
     }
 
     render() {
-        let redirect;
+        let renderComponent = (
+            <main className="flex max-w-full w-full">
+                <aside className="flex-none w-2/12">
+                    <Navbar />
+                </aside>
+                <section className="flex-none w-4/12 px-8 pt-7">
+                    <Chats />
+                </section>
+                <section className="flex-none w-6/12 pr-8 pt-7">
+                    <Messages />
+                </section>
+            </main>
+        );
 
         if (!this.props.isAuthenticated) {
-            redirect = <Redirect to={this.props.redirectPath} />
+            renderComponent = <Redirect to={this.props.redirectPath} />
         }
 
-        return (
-            <>
-                {redirect}
-                <main className="flex max-w-full w-full">
-                    <aside className="flex-none w-2/12">
-                        <Navbar />
-                    </aside>
-                    <section className="flex-none w-4/12 px-8 pt-7">
-                        <Chats />
-                    </section>
-                    <section className="flex-none w-6/12 pr-8 pt-7">
-                        <Messages />
-                    </section>
-                </main>
-            </>
-        )
+        return renderComponent;
     }
 }
+
 
 const mapStateToProps = state => {
     return {
         isAuthenticated: state.auth.isAuthenticated,
-
     }
 }
 

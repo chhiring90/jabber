@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import uuid from 'react-uuid';
+import { Redirect } from 'react-router-dom';
 
 import { FormSection, FormContainer, FormGraphic } from '../hoc/FormLayout';
 import AuthForm from '../components/AuthForm';
@@ -127,10 +128,11 @@ class SignUp extends Component {
         this.setState({ formData: updateControls });
     };
 
-    componentDidMount(){
-        // if(!this.isAuthenticated){
-        //     this.props.setAuthPathRedirect();
-        // }
+    componentDidMount() {
+        console.log(this.props.authRedirectPath);
+        if (this.props.isAuthenticated && !['/signup', '/login'].includes(this.props.authRedirectPath)) {
+            this.props.setAuthPathRedirect();
+        }
     }
 
     componentWillUnmount() {
@@ -138,20 +140,26 @@ class SignUp extends Component {
     }
 
     render() {
-        return (
-            <FormSection>
-                <FormContainer>
-                    <AuthForm
-                        changed={this.inputChangeHandler}
-                        formData={this.state.formData}
-                        submit={this.onSubmitHandler}
-                        isLoading={this.props.isLoading}
-                        message={this.props.message}
-                        formTitle={this.state.formTitle} />
-                </FormContainer>
-                <FormGraphic></FormGraphic>
-            </FormSection>
-        )
+        let renderComponent = (
+        <FormSection>
+            <FormContainer>
+                <AuthForm
+                    changed={this.inputChangeHandler}
+                    formData={this.state.formData}
+                    submit={this.onSubmitHandler}
+                    isLoading={this.props.isLoading}
+                    message={this.props.message}
+                    formTitle={this.state.formTitle} />
+            </FormContainer>
+            <FormGraphic></FormGraphic>
+        </FormSection>
+        );
+
+        if (this.props.isAuthenticated && !['/signup', '/login'].includes(this.props.authRedirectPath)) {
+            renderComponent = <Redirect to={this.props.authRedirectPath} />
+        }
+
+        return renderComponent;
     }
 }
 
@@ -160,13 +168,15 @@ const mapStateToProps = state => {
         isLoading: state.auth.loading,
         error: state.auth.error,
         isAuthenticated: state.auth.isAuthenticated,
-        message: state.auth.message
+        message: state.auth.message,
+        authRedirectPath: state.auth.authRedirectPath,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         onSignUp: (name, email, password, passwordConfirm) => dispatch(actions.signup(name, email, password, passwordConfirm)),
+        setAuthPathRedirect: () => dispatch(actions.setAuthPathRedirect())
     }
 }
 
