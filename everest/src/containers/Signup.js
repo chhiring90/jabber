@@ -5,7 +5,7 @@ import uuid from 'react-uuid';
 import { FormSection, FormContainer, FormGraphic } from '../hoc/FormLayout';
 import AuthForm from '../components/AuthForm';
 import * as actions from '../stores/actions/index';
-import { updateObject, checkValidation } from '../shared/utilty';
+import { checkValidation } from '../shared/utilty';
 
 class SignUp extends Component {
 
@@ -127,6 +127,12 @@ class SignUp extends Component {
         this.setState({ formData: updateControls });
     };
 
+    componentDidMount(){
+        // if(!this.isAuthenticated){
+        //     this.props.setAuthPathRedirect();
+        // }
+    }
+
     componentWillUnmount() {
         // this.clearInputValues(this.state);
     }
@@ -160,7 +166,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onSignUp: (name, email, password, passwordConfirm) => dispatch(actions.signup(name, email, password, passwordConfirm))
+        onSignUp: (name, email, password, passwordConfirm) => dispatch(actions.signup(name, email, password, passwordConfirm)),
     }
 }
 

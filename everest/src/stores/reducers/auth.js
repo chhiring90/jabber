@@ -2,7 +2,6 @@ import * as actionType from '../actions/actionTypes';
 import { updateObject } from '../../shared/utilty';
 
 const initialState = {
-    jwtToken: null,
     userId: null,
     error: null,
     message: [],
@@ -24,7 +23,7 @@ const authSignupSuccess = (state, action) => {
     return updateObject(
         state,
         {
-            isAuthenticated: true,
+            isAuthenticated: action.token || false,
             loading: false,
             message: action.message
         }
@@ -60,6 +59,12 @@ const authLoginFail = (state, action) => {
     });
 }
 
+const setAuthPathRedirect = (state, action) => {
+    return updateObject(state, {
+        authRedirectPath: action.path
+    })
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
 
@@ -74,6 +79,8 @@ const reducer = (state = initialState, action) => {
         case actionType.AUTH_LOGIN_SUCCESS: return authLoginSuccess(state, action);
 
         case actionType.AUTH_LOGIN_FAIL: return authLoginFail(state, action);
+
+        case actionType.SET_AUTH_PATH_REDIRECT: return setAuthPathRedirect(state, action);
 
         default: return state;
     };

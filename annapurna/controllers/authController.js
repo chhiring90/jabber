@@ -14,13 +14,20 @@ const signToken = id => jwt.sign({ id }, process.env.JWT_SECRET, {
 const createSendToken = (user, statusCode, req, res) => {
     const token = signToken(user._id);
     const daysToMilliseconds = 24 * 60 * 60 * 1000;
-    const cookieOption = {
-        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * daysToMilliseconds),
-        httpOnly: true,
-    }
 
-    if (process.env.NODE_ENV === 'production') cookieOption.secure = true;
-    res.cookie('jwt', token, cookieOption);
+    res.cookie('jwt', token,  {
+        expires: new Date(
+            Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * daysToMilliseconds
+        ),
+        httpOnly: true,
+        // domain: 'http://127.0.0.1:5000',
+        // path: '/login',
+        sameSite: 'none',
+        // secure: req.secure || req.headers['x-forwarded-proto'] === 'https'
+        secure: true,
+    });
+
+    // Remove password from output
     user.password = undefined;
 
     res.status(statusCode).json({
@@ -64,10 +71,12 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.isAuthorized = catchAsync(async (req, res, next) => {
-    console.log(req.cookies.jwt);
 
     res.status(200).json({
         status: 'success',
+        data: {
+            user: req.user
+        }
     });
 });
 

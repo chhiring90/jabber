@@ -1,6 +1,6 @@
-import React, { useState }  from 'react';
+import React, { useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 import SignUp from './containers/Signup';
 import Login from './containers/Login';
@@ -9,30 +9,35 @@ import * as actions from './stores/actions/index';
 
 function App(props) {
 
-	useState(()=> {
+	useState(() => {
 
 		props.checkAuthState();
 
-		console.log(props);
-
-		return ()=> {
+		return () => {
 			props.checkAuthState();
 		}
 	}, []);
 
-	if(props.isAuthenticated){
+	let router;
 
-	}
-
-	return (
-		<>
+	if (props.isAuthenticated) {
+		router = (
 			<Switch>
+				<Route path="/signup" component={SignUp} />
+				<Route path="/login" component={Login} />
 				<Route path="/" exact component={UserDashboard} />
+			</Switch>
+		)
+	} else {
+		router = (
+			<Switch>
 				<Route path="/signup" component={SignUp} />
 				<Route path="/login" component={Login} />
 			</Switch>
-		</>
-	);
+		)
+	}
+
+	return router;
 }
 
 const mapStateToProps = state => {

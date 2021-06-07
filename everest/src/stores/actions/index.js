@@ -1,5 +1,6 @@
 export {
     signup,
     login,
-    checkAuthState
+    checkAuthState,
+    setAuthPathRedirect
 } from './auth';

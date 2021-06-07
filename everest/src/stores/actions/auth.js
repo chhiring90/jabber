@@ -1,6 +1,8 @@
 import * as actionTypes from './actionTypes';
 import axios from 'axios';
 
+axios.defaults.withCredentials = true;
+
 const signupStart = () => {
     return {
         type: actionTypes.AUTH_SIGNUP_START,
@@ -27,10 +29,11 @@ const onLoginStart = () => {
     }
 }
 
-const onLoginSuccess = (message) => {
+const onLoginSuccess = (message, token) => {
     return {
         type: actionTypes.AUTH_LOGIN_SUCCESS,
-        message: [actionTypes.MESSAGE_SUCCESS, message]
+        message: [actionTypes.MESSAGE_SUCCESS, message],
+        token
     }
 }
 
@@ -40,6 +43,13 @@ const onLoginFail = (message) => {
         message: [actionTypes.MESSAGE_ERROR, message]
     }
 }
+
+export const setAuthPathRedirect = (path)=> {
+    return {
+        type: actionTypes.SET_AUTH_PATH_REDIRECT,
+        path
+    }
+};
 
 export const signup = (name, email, password, passwordConfirm) => {
     return async dispatch => {
@@ -57,6 +67,8 @@ export const signup = (name, email, password, passwordConfirm) => {
                 url,
                 data: signupData
             });
+
+            console.log(res.data);
 
             if (res.data.status === 'success') {
                 dispatch(signupSuccess('Sign up Successfully!'));
@@ -85,7 +97,7 @@ export const login = (email, password) => {
             });
 
             if (res.data.status === 'success') {
-                dispatch(onLoginSuccess('Login successfully!'));
+                dispatch(onLoginSuccess('Login successfully!', res.data.token));
             }
         } catch (err) {
             console.log(err.response.data.message);
@@ -94,19 +106,21 @@ export const login = (email, password) => {
     }
 }
 
-export const checkAuthState = ()=> {
+export const checkAuthState = () => {
     return async dispatch => {
-        const url = 'http://127.0.0.1:5000/api/v1/users/authorize';
-
         try {
+            const url = 'http://127.0.0.1:5000/api/v1/users/authorize';
             const res = await axios({
                 method: 'GET',
                 url,
             });
 
-            console.log(res.cookies);
-        }catch (err){
+            if (res.data.status === 'success') {
+                dispatch(onLoginSuccess(null, true));
+            }
+        } catch (err) {
             console.log(err.response.data.message);
+            dispatch(onLoginFail());
         }
     }
 }

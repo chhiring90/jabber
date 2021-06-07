@@ -10,21 +10,24 @@ const AppError = require('./utils/appError');
 
 const app = express();
 
-app.enable('trust proxy');
+// app.enable('trust proxy');
+app.use(cookieParser());
 
 // Pug Engine
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 //  Serve Static Files
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
 app.use(express.json());
-app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+}));
 
 // Routes
 app.use('/api/v1/users', userRoutes);
