@@ -9,18 +9,23 @@ import Messages from './Messages';
 
 class UserDashboard extends Component {
 
-    componentDidMount() {
+    componentWillUnmount(){
         if (!this.props.isAuthenticated) {
-            this.pros.setAuthPathRedirect();
+            this.props.setAuthPathRedirect();
             console.log('not auth');
         }
+    }
+
+    onLogoutHandler(e){
+        console.log(e.target)
+        this.props.onLogout();
     }
 
     render() {
         let renderComponent = (
             <main className="flex max-w-full w-full">
                 <aside className="flex-none w-2/12">
-                    <Navbar />
+                    <Navbar onLogout={(e) => this.onLogoutHandler(e)}/>
                 </aside>
                 <section className="flex-none w-4/12 px-8 pt-7">
                     <Chats />
@@ -39,7 +44,6 @@ class UserDashboard extends Component {
     }
 }
 
-
 const mapStateToProps = state => {
     return {
         isAuthenticated: state.auth.isAuthenticated,
@@ -48,7 +52,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        setAuthPathRedirect: dispatch(actions.setAuthPathRedirect('/signup'))
+        setAuthPathRedirect: () => dispatch(actions.setAuthPathRedirect('/signup')),
+        onLogout: () => dispatch(actions.logout())
     }
 }
 

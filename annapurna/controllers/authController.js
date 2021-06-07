@@ -70,6 +70,20 @@ exports.login = catchAsync(async (req, res, next) => {
     createSendToken(user, 200, req, res);
 });
 
+exports.logout = (req, res) => {
+    const oneSecond = 1 * 1000;
+    res.cookie('jwt', 'loggedout', {
+        expires: new Date(Date.now() + oneSecond),
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true
+    });
+
+    res.status(200).json({
+        status: 'success',
+    });
+}
+
 exports.isAuthorized = catchAsync(async (req, res, next) => {
 
     res.status(200).json({

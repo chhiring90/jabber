@@ -14,7 +14,7 @@ function App(props) {
 	useEffect(() => {
 		props.checkAuthState();
 		setIsAuth(props.isAuthenticated);
-
+		
 		return () => {
 			if(!isAuth){
 				props.setAuthPathRedirect();
@@ -31,7 +31,7 @@ function App(props) {
 				<Route path="/login" component={Login} />
 				<Route path="/" exact component={UserDashboard} />
 			</Switch>
-		)
+		);
 	} else {
 		router = (
 			<Switch>

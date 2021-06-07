@@ -65,6 +65,7 @@ class Messages extends Component {
                         {Object.keys(this.state.formData)
                         .map(key => [...Array(this.state.formData[key])].map(input => {
                             return <Input
+                            key={key}
                             additionalWrapClass={key === 'textarea'? inputClass.file.wrap : null}
                             additionalClass={key === 'textarea' ? inputClass.textarea : null}
                             elementType={input.elementType}

@@ -11,7 +11,7 @@ import { checkValidation } from '../shared/utilty';
 class SignUp extends Component {
 
     state = {
-        // isAuthenticated: false
+        // isAuth: false
         formData: {
             name: {
                 key: `${uuid()}`,

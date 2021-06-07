@@ -65,6 +65,13 @@ const setAuthPathRedirect = (state, action) => {
     })
 }
 
+const authLogoutStart = (state, action) => {
+    return updateObject(state, {
+        message: action.message,
+        isAuthenticated: false
+    });
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
 
@@ -79,6 +86,8 @@ const reducer = (state = initialState, action) => {
         case actionType.AUTH_LOGIN_SUCCESS: return authLoginSuccess(state, action);
 
         case actionType.AUTH_LOGIN_FAIL: return authLoginFail(state, action);
+
+        case actionType.AUTH_LOGOUT_START: return authLogoutStart(state, action);
 
         case actionType.SET_AUTH_PATH_REDIRECT: return setAuthPathRedirect(state, action);
 

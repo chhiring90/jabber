@@ -62,9 +62,6 @@ class Chats extends Component {
                 </div>
                 <SimpleBar className="max-height">
                     <Chat status="online" />
-                    <Chat stauts="recentlyOnline" />
-                    <Chat stauts="recentlyOnline" />
-                    <Chat stauts="recentlyOnline" />
                 </SimpleBar>
             </>
         )

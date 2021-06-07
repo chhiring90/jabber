@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from 'axios';
+import axios from '../../axios-api';
 
 axios.defaults.withCredentials = true;
 
@@ -44,7 +44,26 @@ const onLoginFail = (message) => {
     }
 }
 
-export const setAuthPathRedirect = (path)=> {
+const onLogoutStart = (message) => {
+    return {
+        type: actionTypes.AUTH_LOGOUT_START,
+    }
+}
+
+const onLogoutSuccess = (message) => {
+    return {
+        type: actionTypes.AUTH_LOGOUT_SUCCESS
+    }
+}
+
+const onLogoutFail = (message) => {
+    return {
+        type: actionTypes.AUTH_LOGOUT_FAIL,
+        message: [actionTypes.MESSAGE_ERROR, message]
+    }
+}
+
+export const setAuthPathRedirect = (path) => {
     return {
         type: actionTypes.SET_AUTH_PATH_REDIRECT,
         path
@@ -52,75 +71,67 @@ export const setAuthPathRedirect = (path)=> {
 };
 
 export const signup = (name, email, password, passwordConfirm) => {
-    return async dispatch => {
-        try {
-            dispatch(signupStart());
-            const signupData = {
-                name,
-                email,
-                password,
-                passwordConfirm
-            }
-            const url = 'http://127.0.0.1:5000/api/v1/users/signup';
-            const res = await axios({
-                method: 'POST',
-                url,
-                data: signupData
-            });
-
-            console.log(res.data);
-
+    return dispatch => {
+        dispatch(signupStart());
+        const signupData = {
+            name,
+            email,
+            password,
+            passwordConfirm
+        }
+        axios.post('/users/signup', signupData).then(res => {
             if (res.data.status === 'success') {
                 dispatch(signupSuccess('Sign up Successfully!'));
             }
-        } catch (err) {
+        }).catch(err => {
             console.log(err.response.data.message);
             dispatch(signupFail(err.response.data.message));
-        }
+        });
     }
 }
 
 export const login = (email, password) => {
-    return async dispatch => {
-        try {
-            dispatch(onLoginStart());
-            const loginData = {
-                email,
-                password
-            }
-
-            const url = 'http://127.0.0.1:5000/api/v1/users/login';
-            const res = await axios({
-                method: 'POST',
-                url,
-                data: loginData
-            });
-
-            if (res.data.status === 'success') {
-                dispatch(onLoginSuccess('Login successfully!', res.data.token));
-            }
-        } catch (err) {
-            console.log(err.response.data.message);
-            dispatch(onLoginFail(err.response.data.message));
+    return dispatch => {
+        dispatch(onLoginStart());
+        const loginData = {
+            email,
+            password
         }
+        axios.post('/users/login', loginData)
+            .then(res => {
+                if (res.data.status === 'success') {
+                    dispatch(onLoginSuccess('Login successfully!', res.data.token));
+                }
+            }).catch(err => {
+                console.log(err.response.data.message);
+                dispatch(onLoginFail(err.response.data.message));
+            });
+    }
+}
+
+export const logout = () => {
+    return dispatch => {
+        dispatch(onLogoutStart());
+        axios.get('/users/logout').then(res => {
+            if(res.data.status === 'success') {
+                dispatch(onLogoutSuccess());
+            }
+        }).catch(err => {
+            console.log(err.response.data);
+            dispatch(onLogoutFail(err.response.data.message));
+        });
     }
 }
 
 export const checkAuthState = () => {
-    return async dispatch => {
-        try {
-            const url = 'http://127.0.0.1:5000/api/v1/users/authorize';
-            const res = await axios({
-                method: 'GET',
-                url,
-            });
-
+    return dispatch => {
+        axios.get('/users/authorize').then(res => {
             if (res.data.status === 'success') {
                 dispatch(onLoginSuccess(null, true));
             }
-        } catch (err) {
+        }).catch(err => {
             console.log(err.response.data.message);
             dispatch(onLoginFail());
-        }
+        });
     }
 }
