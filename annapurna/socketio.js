@@ -1,9 +1,6 @@
 const socketController = require('./controllers/socketController');
 
-module.exports = io => {
-    const onConnetion = socket => {
-        socketController.onJoin(socket);
-    }
-
-    io.on('connection', onConnetion);
-};
+module.exports = io => io.on('connection', socket => {
+    socketController.onJoin(socket);
+    console.log('We have new connection')
+});;

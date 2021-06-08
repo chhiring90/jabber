@@ -12,20 +12,24 @@ class UserDashboard extends Component {
     componentWillUnmount(){
         if (!this.props.isAuthenticated) {
             this.props.setAuthPathRedirect();
-            console.log('not auth');
         }
     }
 
     onLogoutHandler(e){
-        console.log(e.target)
         this.props.onLogout();
     }
 
     render() {
+
+        let {name} = this.props.user;
+
         let renderComponent = (
             <main className="flex max-w-full w-full">
                 <aside className="flex-none w-2/12">
-                    <Navbar onLogout={(e) => this.onLogoutHandler(e)}/>
+                    <Navbar 
+                    onLogout={(e) => this.onLogoutHandler(e)}
+                    name={name}
+                    />
                 </aside>
                 <section className="flex-none w-4/12 px-8 pt-7">
                     <Chats />
@@ -47,6 +51,7 @@ class UserDashboard extends Component {
 const mapStateToProps = state => {
     return {
         isAuthenticated: state.auth.isAuthenticated,
+        user: state.auth.user
     }
 }
 

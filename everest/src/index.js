@@ -1,14 +1,18 @@
+import path from 'path';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, compose, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
+import dotenv from 'dotenv';
 
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import authReducer from './stores/reducers/auth';
+
+dotenv.config(path.join(__dirname, '../config.env'));
 
 const rootReducer = combineReducers({
   auth: authReducer

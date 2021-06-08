@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-const groupSchema = new mongoose.Schema({
+const roomSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'A Group must have a name']
+        required: [true, 'A Room must have a name']
     },
     createAt: Date,
     admin: {
@@ -14,8 +14,9 @@ const groupSchema = new mongoose.Schema({
         type: Boolean,
         default: true,
         select: false
-    }
+    },
+    slug: String
 });
 
-const Group = mongoose.model('Group', groupSchema);
-module.exports = Group;
+const Room = mongoose.model('Room', roomSchema);
+module.exports = Room;

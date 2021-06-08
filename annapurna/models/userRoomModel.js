@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const userGroupSchema = new mongoose.Schema({
+const userRoomSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.ObjectId,
         ref: 'User'
@@ -16,5 +16,5 @@ const userGroupSchema = new mongoose.Schema({
     }
 });
 
-const UserGroup = mongoose.model('UserGroup', userGroupSchema);
-module.exports = UserGroup;
+const UserRoom = mongoose.model('UserRoom', userRoomSchema);
+module.exports = UserRoom;

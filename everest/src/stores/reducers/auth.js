@@ -2,9 +2,8 @@ import * as actionType from '../actions/actionTypes';
 import { updateObject } from '../../shared/utilty';
 
 const initialState = {
-    userId: null,
+    user: null,
     error: null,
-    message: [],
     loading: false,
     authRedirectPath: '/',
     isAuthenticated: false
@@ -25,7 +24,8 @@ const authSignupSuccess = (state, action) => {
         {
             isAuthenticated: action.token || false,
             loading: false,
-            message: action.message
+            message: action.message,
+            user: action.user
         }
     );
 };
@@ -46,9 +46,10 @@ const authLoginStart = (state, action) => {
 
 const authLoginSuccess = (state, action) => {
     return updateObject(state, {
-        isAuthenticated: true,
+        isAuthenticated: action.token || false,
         loading: false,
         message: action.message,
+        user: action.user,
     });
 }
 

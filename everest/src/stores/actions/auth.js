@@ -9,10 +9,12 @@ const signupStart = () => {
     }
 };
 
-const signupSuccess = (message) => {
+const signupSuccess = (message, token, user) => {
     return {
         type: actionTypes.AUTH_SIGNUP_SUCCESS,
-        message: [actionTypes.MESSAGE_SUCCESS, message]
+        message: [actionTypes.MESSAGE_SUCCESS, message],
+        token,
+        user
     }
 };
 
@@ -29,11 +31,12 @@ const onLoginStart = () => {
     }
 }
 
-const onLoginSuccess = (message, token) => {
+const onLoginSuccess = (message, token, user) => {
     return {
         type: actionTypes.AUTH_LOGIN_SUCCESS,
         message: [actionTypes.MESSAGE_SUCCESS, message],
-        token
+        token,
+        user
     }
 }
 
@@ -78,10 +81,11 @@ export const signup = (name, email, password, passwordConfirm) => {
             email,
             password,
             passwordConfirm
-        }
+        };
         axios.post('/users/signup', signupData).then(res => {
-            if (res.data.status === 'success') {
-                dispatch(signupSuccess('Sign up Successfully!'));
+            const {token, status} = res.data;
+            if (status === 'success') {
+                dispatch(signupSuccess('Sign up Successfully!', token, res.data.data.user));
             }
         }).catch(err => {
             console.log(err.response.data.message);
@@ -96,11 +100,12 @@ export const login = (email, password) => {
         const loginData = {
             email,
             password
-        }
+        };
         axios.post('/users/login', loginData)
             .then(res => {
-                if (res.data.status === 'success') {
-                    dispatch(onLoginSuccess('Login successfully!', res.data.token));
+                const {token, status} = res.data;
+                if (status === 'success') {
+                    dispatch(onLoginSuccess('Login successfully!', token, res.data.data.user));
                 }
             }).catch(err => {
                 console.log(err.response.data.message);
@@ -126,8 +131,9 @@ export const logout = () => {
 export const checkAuthState = () => {
     return dispatch => {
         axios.get('/users/authorize').then(res => {
+                const {user} = res.data.data;
             if (res.data.status === 'success') {
-                dispatch(onLoginSuccess(null, true));
+                dispatch(onLoginSuccess(null, true, user));
             }
         }).catch(err => {
             console.log(err.response.data.message);

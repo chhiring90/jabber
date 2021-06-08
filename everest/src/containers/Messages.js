@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import io from "socket.io-client";
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 
@@ -7,6 +8,8 @@ import Message from '../components/Message';
 import Input from '../components/Input';
 import { AiFillFileImage, AiOutlineSend } from 'react-icons/ai';
 import Button from '../components/Button';
+
+let socket;
 
 class Messages extends Component {
     state = {
@@ -42,6 +45,25 @@ class Messages extends Component {
                 touched: false
             },
         },
+    }
+
+    componentDidMount() {
+        socket = io(process.env.ENDPOINT_DEV, { 
+            // transports: ['websocket', 'polling', 'flashsocket'],
+        });
+
+        socket.on('connect', () => {
+            console.dir('Connection on client');
+            socket.emit('join', 'Hey you', err => {
+                console.log(err);
+            });
+        });
+
+        
+    }
+
+    componentWillUnmount() {
+        socket.disconnect();
     }
 
     render() {

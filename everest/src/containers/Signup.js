@@ -129,7 +129,6 @@ class SignUp extends Component {
     };
 
     componentDidMount() {
-        console.log(this.props.authRedirectPath);
         if (this.props.isAuthenticated && !['/signup', '/login'].includes(this.props.authRedirectPath)) {
             this.props.setAuthPathRedirect();
         }
