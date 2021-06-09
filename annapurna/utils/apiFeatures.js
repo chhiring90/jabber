@@ -5,35 +5,21 @@ class APIFeatures {
         this.queryString = queryString;
     }
 
-    // filter(){
-    //     const queryObj = {...this.queryString};
-    //     const excludedFields = ['page', 'sort', 'limit', 'fields'];
-    //     excludedFields.forEach(el => delete queryObj[el]);
-
-    //     let queryStr = JSON.stringify(queryObj);
-    //     queryStr = queryStr.replace(/\b(gte|lte|lt|gt)\b/g, match => `$${match}`);
-
-    //     this.query = this.query.find(JSON.parse(queryStr));
-    //     return this;
-    // }
-
-
     filter(){
         const queryObj = {...this.queryString};
-        const excludedFileds = ['sort', 'limit', 'fields', 'page'];
-        excludedFileds.forEach(el => delete queryObj[el]);
+        const excludedFields = ['page', 'sort', 'limit', 'fields'];
+        excludedFields.forEach(el => delete queryObj[el]);
 
         let queryStr = JSON.stringify(queryObj);
         queryStr = queryStr.replace(/\b(gte|lte|lt|gt)\b/g, match => `$${match}`);
 
-        this.query = this.query.filter(JSON.parse(queryStr));
+        this.query = this.query.find(JSON.parse(queryStr));
         return this;
-
     }
 
     sort(){
-        if(this.query.sort){
-            const sortBy = this.queryString.split(',').join(' ');
+        if(this.queryString.sort){
+            const sortBy = this.queryString.sort.split(',').join(' ');
             this.query = this.query.sort(sortBy);
         }else {
             this.query = this.query.sort('-createdAt');
@@ -42,7 +28,7 @@ class APIFeatures {
     }
 
     limitFields(){
-        if(this.query.fields){
+        if(this.queryString.fields){
             const sortBy = this.queryString.fields.split(',').join(' ');
             this.query = this.query.select(sortBy);
         }else {

@@ -4,6 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 
 exports.onJoin = socket => async (data, callback) => {
     try {
+        if(!data.id) return callback();
         const user = await User.findByIdAndUpdate(data.id, {active: true}).select('+active');
         socket.userId = user._id;
     }catch(err) {

@@ -45,7 +45,10 @@ const userSchema = new mongoose.Schema({
         }
     },
     passwordChangeAt: Date,
-    createAt: Date,
+    createdAt: {
+        type: Date,
+        default: Date.now()
+    },
     passwordResetToken: String,
     passwordResetExpires: Date,
     slug: String,
@@ -62,7 +65,6 @@ const userSchema = new mongoose.Schema({
 // DOCUMENT MIDDLEWARE: RUNS BEFORE .SAVE() AND .CREATE()
 userSchema.pre('save', function(next) {
     this.slug = slugify(this.name, {lower: true});
-    console.log(this.slug);
     next();
 });
 
