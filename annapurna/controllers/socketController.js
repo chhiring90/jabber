@@ -4,9 +4,11 @@ const catchAsync = require('../utils/catchAsync');
 
 exports.onJoin = socket => async (data, callback) => {
     try {
-        if(!data.id) return callback();
-        const user = await User.findByIdAndUpdate(data.id, {active: true}).select('+active');
+        const user = await User.findByIdAndUpdate(data._id, {active: true});
+        if(!user) return callback();
         socket.userId = user._id;
+        socket.emit('joined', user._id);
+        callback();
     }catch(err) {
         console.log(err);
     }
@@ -14,7 +16,7 @@ exports.onJoin = socket => async (data, callback) => {
 
 exports.onDisconnect = socket => async (reason) => {
     try {
-        const user = await User.findByIdAndUpdate(socket.userId, {active: false}).select('+active');
+        const user = await User.findByIdAndUpdate(socket.userId, {active: false});
         console.log(reason);
         // if(!user) return new AppError('User not found')
         if(user){

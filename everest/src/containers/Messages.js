@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import io from "socket.io-client";
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
+import axios from '../axios-api';
 
 import Avatar from '../components/Avatar';
 import Message from '../components/Message';
@@ -58,18 +59,21 @@ class Messages extends Component {
         socket.connect();
         socket.on('connect', () => {
             console.log('Socket connection on client successfully');
-            let { id, slug } = this.props.user;
-            socket.emit('join', {id, slug}, err => {
+            let { _id, slug } = this.props.user;
+            socket.emit('join', {_id, slug}, err => {
                 if(err){
                     console.log(err);
                 }
             });
         });
 
-        socket.on('joined', ({}), err => {
-            if(err){
-                console.log(err);
-            }
+        socket.on('joined', userId => {
+            const user = axios.get(`/users/${userId}`)
+            .then(res => {
+                console.log(res.data.data)
+            })
+            .catch(err => console.log(err));
+            console.log(user);
         });
     }
 
