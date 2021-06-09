@@ -13,6 +13,7 @@ const server = http.createServer(app);
 const io = socket(server);
 
 socketio(io);
+
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
 
 mongoose.connect(DB, {

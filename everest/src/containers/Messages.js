@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
 import io from "socket.io-client";
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
@@ -48,18 +49,28 @@ class Messages extends Component {
     }
 
     componentDidMount() {
-        socket = io(process.env.ENDPOINT_DEV, { 
-            // transports: ['websocket', 'polling', 'flashsocket'],
+        let endpoint = process.env.REACT_APP_ENDPOINT_DEV || 'http://127.0.0.1:5000/';
+        socket = io(endpoint, { 
+            transports: ['websocket', 'polling', 'flashsocket'],
+            autoConnect: false
         });
 
+        socket.connect();
         socket.on('connect', () => {
-            console.dir('Connection on client');
-            socket.emit('join', 'Hey you', err => {
-                console.log(err);
+            console.log('Socket connection on client successfully');
+            let { id, slug } = this.props.user;
+            socket.emit('join', {id, slug}, err => {
+                if(err){
+                    console.log(err);
+                }
             });
         });
 
-        
+        socket.on('joined', ({}), err => {
+            if(err){
+                console.log(err);
+            }
+        });
     }
 
     componentWillUnmount() {
@@ -111,4 +122,16 @@ class Messages extends Component {
     }
 }
 
-export default Messages;
+const mapStateToProps = (state) => {
+    return {
+        user: state.auth.user
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Messages);

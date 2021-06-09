@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const slugify = require('slugify');
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -53,6 +54,16 @@ const userSchema = new mongoose.Schema({
         default: true,
         select: false
     }
+}, {
+    toJSON: {virtuals: true},
+    toObject: {virtuals: true}
+});
+
+// DOCUMENT MIDDLEWARE: RUNS BEFORE .SAVE() AND .CREATE()
+userSchema.pre('save', function(next) {
+    this.slug = slugify(this.name, {lower: true});
+    console.log(this.slug);
+    next();
 });
 
 userSchema.pre('save', async function (next) {

@@ -7,12 +7,12 @@ import { createStore, compose, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import dotenv from 'dotenv';
 
+
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import authReducer from './stores/reducers/auth';
-
-dotenv.config(path.join(__dirname, '../config.env'));
+dotenv.config(path.join(__dirname, '../config.env.development'));
 
 const rootReducer = combineReducers({
   auth: authReducer
