@@ -75,23 +75,14 @@ const authLogoutStart = (state, action) => {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-
         case actionType.AUTH_SIGNUP_START: return authSignupStart(state, action);
-
         case actionType.AUTH_SIGNUP_SUCCESS: return authSignupSuccess(state, action);
-
         case actionType.AUTH_SIGNUP_FAIL: return authSignupFail(state, action);
-
         case actionType.AUTH_LOGIN_START: return authLoginStart(state, action);
-
         case actionType.AUTH_LOGIN_SUCCESS: return authLoginSuccess(state, action);
-
         case actionType.AUTH_LOGIN_FAIL: return authLoginFail(state, action);
-
         case actionType.AUTH_LOGOUT_START: return authLogoutStart(state, action);
-
         case actionType.SET_AUTH_PATH_REDIRECT: return setAuthPathRedirect(state, action);
-
         default: return state;
     };
 };

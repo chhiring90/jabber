@@ -12,10 +12,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import authReducer from './stores/reducers/auth';
+import chatReducer from './stores/reducers/chats';
+import messageReducer from './stores/reducers/message';
+
 dotenv.config(path.join(__dirname, '../config.env.development'));
 
 const rootReducer = combineReducers({
-  auth: authReducer
+  auth: authReducer,
+  chat: chatReducer,
+  message: messageReducer
 });
 
 const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;

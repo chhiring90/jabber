@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
+import {connect} from 'react-redux';
+import {createBrowserHistory} from 'history';
 
 import Chat from '../components/Chat';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import { AiOutlinePlus, AiOutlineSearch } from 'react-icons/ai';
+import * as action from '../stores/actions/index';
 
 class Chats extends Component {
 
@@ -27,7 +30,25 @@ class Chats extends Component {
         }
     }
 
+    componentDidMount() {
+        this.props.fetchUser(this.props.currentUserId);
+    }
+
+    clickHandler(){
+        console.log(window.location);
+        console.log(createBrowserHistory);
+    }
+
     render() {
+        const chats = this.props.users.map(user => {
+            return  <Chat 
+            clicked={this.clickHandler}
+                key={user._id}
+                status={`${user.active ? "online" : 'offline'}`}
+                name={user.name}
+                />
+        });
+
         return (
             <>
                 <div className="flex mb-5 flex-wrap">
@@ -61,11 +82,24 @@ class Chats extends Component {
                     </form>
                 </div>
                 <SimpleBar className="max-height">
-                    <Chat status="online" />
+                    {chats}
                 </SimpleBar>
             </>
         )
     }
 }
 
-export default Chats;
+const mapStateToProps = state => {
+    return {
+        users: state.chat.users,
+        currentUserId: state.auth.user._id
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        fetchUser: (currentUserId) => dispatch(action.onFetchUser(currentUserId))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chats);

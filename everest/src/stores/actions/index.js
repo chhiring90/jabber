@@ -5,3 +5,7 @@ export {
     setAuthPathRedirect,
     logout
 } from './auth';
+
+export {
+    onFetchUser,
+} from './chats';

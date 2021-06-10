@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -7,28 +7,25 @@ import Login from './containers/Login';
 import UserDashboard from './containers/UserDashboard';
 import * as actions from './stores/actions/index';
 
-function App(props) {
 
-	const [isAuth, setIsAuth] = useState(false);
+function App(props) {
 
 	useEffect(() => {
 		props.checkAuthState();
-		setIsAuth(props.isAuthenticated);
-		
 		return () => {
-			if(!isAuth){
+			if (!props.isAuthenticated) {
 				props.setAuthPathRedirect();
 			}
 		}
-	}, [isAuth, props]);
+	}, [props.isAuthenticated]);
 
 	let router;
 
-	if (isAuth) {
+	if (props.isAuthenticated) {
 		router = (
 			<Switch>
-				<Route path="/signup" component={SignUp} />
-				<Route path="/login" component={Login} />
+				<Route path="/signup" exact component={SignUp} />
+				<Route path="/login" exact component={Login} />
 				<Route path="/" exact component={UserDashboard} />
 			</Switch>
 		);
@@ -37,7 +34,7 @@ function App(props) {
 			<Switch>
 				<Route path="/signup" component={SignUp} />
 				<Route path="/login" component={Login} />
-				<Redirect to="/signup"/>
+				<Redirect to="/signup" />
 			</Switch>
 		)
 	}
@@ -47,7 +44,7 @@ function App(props) {
 
 const mapStateToProps = state => {
 	return {
-		isAuthenticated: state.auth.isAuthenticated
+		isAuthenticated: state.auth.isAuthenticated,
 	}
 }
 

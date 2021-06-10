@@ -11,8 +11,6 @@ import Input from '../components/Input';
 import { AiFillFileImage, AiOutlineSend } from 'react-icons/ai';
 import Button from '../components/Button';
 
-let socket;
-
 class Messages extends Component {
     state = {
         messages: [],
@@ -50,35 +48,9 @@ class Messages extends Component {
     }
 
     componentDidMount() {
-        let endpoint = process.env.REACT_APP_ENDPOINT_DEV || 'http://127.0.0.1:5000/';
-        socket = io(endpoint, { 
-            transports: ['websocket', 'polling', 'flashsocket'],
-            autoConnect: false
-        });
-
-        socket.connect();
-        socket.on('connect', () => {
-            console.log('Socket connection on client successfully');
-            let { _id, slug } = this.props.user;
-            socket.emit('join', {_id, slug}, err => {
-                if(err){
-                    console.log(err);
-                }
-            });
-        });
-
-        socket.on('joined', userId => {
-            const user = axios.get(`/users/${userId}`)
-            .then(res => {
-                console.log(res.data.data)
-            })
-            .catch(err => console.log(err));
-            console.log(user);
-        });
     }
 
     componentWillUnmount() {
-        socket.disconnect();
     }
 
     render() {
@@ -134,7 +106,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-
+        
     }
 }
 
