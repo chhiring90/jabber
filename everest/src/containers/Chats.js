@@ -35,8 +35,7 @@ class Chats extends Component {
     }
 
     clickHandler(){
-        console.log(window.location);
-        console.log(createBrowserHistory);
+        window.history.pushState({}, null, '/?room=hello')
     }
 
     render() {

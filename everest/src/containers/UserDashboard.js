@@ -1,38 +1,27 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import io from 'socket.io-client';
+import axios from '../axios-api';
+import socket from '../socket';
 
 import * as actions from '../stores/actions/index';
 import Navbar from '../components/Navbar';
 import Chats from './Chats';
 import Messages from './Messages';
 
-let socket;
 
 class UserDashboard extends Component {
 
     componentDidMount(){
-        const endpoint = process.env.REACT_APP_ENDPOINT_DEV || 'http://127.0.0.1:5000/';
-        socket = io(endpoint, { 
-            transports: ['websocket', 'polling', 'flashsocket'],
-            autoConnect: false
-        });
-
         socket.connect();
-        socket.on('connect', () => {
-            console.log('Socket connection on client successfully');
-            const {_id, slug} = this.props.user;
-            socket.emit('join', {_id,slug},
-            err => {
-                if(err){
-                    console.log(err);
-                }
-            });
-        });
+        socket.on('connect', this.props.socketConnect(this.props.user));
 
-        socket.on('joined', userId => {
-            console.log(userId);
+        socket.on('joinedserver', userId => {
+            axios.get(`/users/${userId}`)
+            .then(res => {
+                console.log(res.data.data)
+            })
+            .catch(err => console.log(err));
         });
     }
 
@@ -86,7 +75,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         setAuthPathRedirect: () => dispatch(actions.setAuthPathRedirect('/signup')),
-        onLogout: () => dispatch(actions.logout())
+        onLogout: () => dispatch(actions.logout()),
+        socketConnect: (user) => dispatch(actions.socketConnect(user))
     }
 }
 

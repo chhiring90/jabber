@@ -9,3 +9,7 @@ export {
 export {
     onFetchUser,
 } from './chats';
+
+export {
+    socketConnect,
+} from './socket';

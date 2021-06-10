@@ -2,12 +2,13 @@ const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
-exports.onJoin = socket => async (data, callback) => {
+exports.onJoinServer = socket => async (data, callback) => {
     try {
         const user = await User.findByIdAndUpdate(data._id, {active: true});
         if(!user) return callback();
         socket.userId = user._id;
-        socket.emit('joined', user._id);
+        console.log('Join Server');
+        socket.emit('joinedserver', user._id);
         callback();
     }catch(err) {
         console.log(err);
