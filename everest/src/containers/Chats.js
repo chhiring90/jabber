@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
-import {connect} from 'react-redux';
-import {createBrowserHistory} from 'history';
+import { connect } from 'react-redux';
+import { createBrowserHistory } from 'history';
+import socket from '../socket';
 
 import Chat from '../components/Chat';
 import Button from '../components/Button';
@@ -30,22 +31,27 @@ class Chats extends Component {
         }
     }
 
+    componentDidUpdate() {
+        socket.on('joinedserver', (userId) => this.props.fetchUser(userId));
+    }
+
     componentDidMount() {
+        if(!this.props.currentUserId) return;
         this.props.fetchUser(this.props.currentUserId);
     }
 
-    clickHandler(){
-        window.history.pushState({}, null, '/?room=hello')
+    componentWillUnmount() {
+        socket.off();
     }
 
     render() {
         const chats = this.props.users.map(user => {
-            return  <Chat 
-            clicked={this.clickHandler}
+            return <Chat
+                clicked={(event, slug) => this.props.clicked(event, user.slug)}
                 key={user._id}
                 status={`${user.active ? "online" : 'offline'}`}
                 name={user.name}
-                />
+            />
         });
 
         return (
@@ -91,13 +97,13 @@ class Chats extends Component {
 const mapStateToProps = state => {
     return {
         users: state.chat.users,
-        currentUserId: state.auth.user._id
+        currentUserId: state.auth.user._id,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchUser: (currentUserId) => dispatch(action.onFetchUser(currentUserId))
+        fetchUser: (currentUserId) => dispatch(action.fetchUser(currentUserId))
     }
 }
 

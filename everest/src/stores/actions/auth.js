@@ -14,7 +14,8 @@ const signupSuccess = (message, token, user) => {
         type: actionTypes.AUTH_SIGNUP_SUCCESS,
         message: [actionTypes.MESSAGE_SUCCESS, message],
         token,
-        user
+        user,
+        isOnine: true
     }
 };
 
@@ -36,7 +37,8 @@ const onLoginSuccess = (message, token, user) => {
         type: actionTypes.AUTH_LOGIN_SUCCESS,
         message: [actionTypes.MESSAGE_SUCCESS, message],
         token,
-        user
+        user,
+        isOnine: true
     }
 }
 
@@ -72,6 +74,29 @@ export const setAuthPathRedirect = (path) => {
         path
     }
 };
+
+const joinedServerStart = () => {
+    return {
+        type: actionTypes.SOCKET_JOINED_SERVER,
+        loading: true
+    }
+}
+
+const joinedServerSuccess = (active) => {
+    return {
+        type: actionTypes.SOCKET_JOINED_SUCCESS,
+        loading: false,
+        active
+    }
+}
+
+const joinedServeFail = (error) => {
+    return {
+        type: actionTypes.SOCKET_JOINED_FAIL,
+        loading: false,
+        error
+    }
+}
 
 export const signup = (name, email, password, passwordConfirm) => {
     return dispatch => {
@@ -139,5 +164,16 @@ export const checkAuthState = () => {
             console.log(err.response.data.message);
             dispatch(onLoginFail());
         });
+    }
+}
+
+export const joinedServer = (userId) => {
+    return dispatch => {
+        dispatch(joinedServerStart());
+        axios.get(`/users/${userId}`)
+            .then(res => {
+                dispatch(joinedServerSuccess(res.data.data.active));
+            })
+            .catch(err => dispatch(joinedServeFail(err)));
     }
 }

@@ -10,18 +10,22 @@ export const socketInit = () => {
 const socketConnectStart = () => {
     return {
         type: actionTypes.SOCKET_CONNECT,
+        loading: true
     }
 }
 
 const socketConnectSuccess = () => {
     return {
-        type: actionTypes.SOCKET_CONNECT_SUCCESS
+        type: actionTypes.SOCKET_CONNECT_SUCCESS,
+        loading: false
     }
 }
 
-const socketConnectFail = () => {
+const socketConnectFail = (error) => {
     return {
-        type: actionTypes.SOCKET_CONNECT_FAIL
+        type: actionTypes.SOCKET_CONNECT_FAIL,
+        loading: false,
+        error
     }
 }
 
@@ -30,10 +34,10 @@ export const socketConnect = (user) => {
         dispatch(socketConnectStart());
         console.log('Socket connection on client successfully');
         const {_id, slug} = user;
-        console.log(socket.emit());
-        socket.emit('joinedserver', {_id,slug},
+        socket.emit('joinserver', {_id,slug},
         err => {
-            console.log(err);
+            dispatch(socketConnectFail(err));
         });
+        dispatch(socketConnectSuccess());
     }
 }

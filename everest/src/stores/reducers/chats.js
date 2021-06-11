@@ -1,5 +1,5 @@
 import * as actions from '../actions/actionTypes';
-import {updateObject} from '../../shared/utilty';
+import { updateObject } from '../../shared/utilty';
 
 const initialState = {
     loading: false,
@@ -29,9 +29,9 @@ const fetchUserFail = (state, action) => {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actions.FETCH_USER : return fetchUser(state, action);
-        case actions.FETCH_USER_SUCCESS : return fetchUserSuccess(state, action);
-        case actions.FETCH_USER_FAIL : return fetchUserFail(state, action);
+        case actions.FETCH_USER: return fetchUser(state, action);
+        case actions.FETCH_USER_SUCCESS: return fetchUserSuccess(state, action);
+        case actions.FETCH_USER_FAIL: return fetchUserFail(state, action);
         default: return state;
     }
 }

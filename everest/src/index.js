@@ -3,32 +3,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { createStore, compose, applyMiddleware, combineReducers } from 'redux';
-import thunk from 'redux-thunk';
 import dotenv from 'dotenv';
-
 
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import authReducer from './stores/reducers/auth';
-import chatReducer from './stores/reducers/chats';
-import messageReducer from './stores/reducers/message';
+import store from './rootReducer';
 
 dotenv.config(path.join(__dirname, '../config.env.development'));
-
-const rootReducer = combineReducers({
-  auth: authReducer,
-  chat: chatReducer,
-  message: messageReducer
-});
-
-const composeEnhancers = (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
-
-const store = createStore(rootReducer, composeEnhancers(
-  applyMiddleware(thunk)
-));
-
 ReactDOM.render(
   <Provider store={store}>
     <Router>

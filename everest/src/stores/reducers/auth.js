@@ -6,7 +6,7 @@ const initialState = {
     error: null,
     loading: false,
     authRedirectPath: '/',
-    isAuthenticated: false
+    isAuthenticated: false,
 };
 
 const authSignupStart = (state, action) => {
@@ -25,7 +25,8 @@ const authSignupSuccess = (state, action) => {
             isAuthenticated: action.token || false,
             loading: false,
             message: action.message,
-            user: action.user
+            user: action.user,
+            isOnine: action.isOnine
         }
     );
 };
@@ -50,6 +51,7 @@ const authLoginSuccess = (state, action) => {
         loading: false,
         message: action.message,
         user: action.user,
+        isOnine: action.isOnine
     });
 }
 
@@ -73,6 +75,30 @@ const authLogoutStart = (state, action) => {
     });
 }
 
+const joinedServer = (state, action) => {
+    return updateObject(state, {
+        loading: action.loading
+    });
+};
+
+const joinedServerSuccess = (state, action) => {
+
+    return updateObject(state, {
+        user: {
+            ...state.user,
+            active: action.active
+        },
+        loading: action.loading,
+    });
+};
+
+const joinedServerFail = (state, action) => {
+    return updateObject(state, {
+        loading: action.loading,
+        error: action.error
+    })
+};
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionType.AUTH_SIGNUP_START: return authSignupStart(state, action);
@@ -83,6 +109,9 @@ const reducer = (state = initialState, action) => {
         case actionType.AUTH_LOGIN_FAIL: return authLoginFail(state, action);
         case actionType.AUTH_LOGOUT_START: return authLogoutStart(state, action);
         case actionType.SET_AUTH_PATH_REDIRECT: return setAuthPathRedirect(state, action);
+        case actionType.SOCKET_JOINED_SERVER: return joinedServer(state, action);
+        case actionType.SOCKET_JOINED_SUCCESS: return joinedServerSuccess(state, action);
+        case actionType.SOCKET_JOINED_FAIL: return joinedServerFail(state, action);
         default: return state;
     };
 };

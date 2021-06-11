@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import io from "socket.io-client";
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 import axios from '../axios-api';
@@ -60,11 +59,14 @@ class Messages extends Component {
                 wrap: 'flex-auto',
             },
         }
+        console.log(this.props.activeRoomUser, '[Messages]');
 
         return(
             <div className="flex flex-wrap w-100 shadow-message">
                 <div className="bg-brand-gray-200 border-brand-gray-400 border-b-2 flex-full px-6 pt-6 pb-3">
-                    <Avatar size="medium" typing={false} name="Nika Jerrardo"/>
+                    <Avatar size="medium" typing={false} 
+                    name={this.props.activeRoomUser.name}
+                    />
                 </div>
                 <SimpleBar className="flex-full h-message max-h-message p-5">
                     <Message />

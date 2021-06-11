@@ -3,11 +3,13 @@ export {
     login,
     checkAuthState,
     setAuthPathRedirect,
-    logout
+    logout,
+    joinedServer
 } from './auth';
 
 export {
-    onFetchUser,
+    fetchUser,
+    createRoom
 } from './chats';
 
 export {
