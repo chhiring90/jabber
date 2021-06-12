@@ -9,7 +9,8 @@ export {
 
 export {
     fetchUser,
-    createRoom
+    sendCreateRoom,
+    createdRoom
 } from './chats';
 
 export {

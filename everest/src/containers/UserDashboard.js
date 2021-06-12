@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import socket from '../socket';
+// import axios from '../axios-api';
 
 import * as actions from '../stores/actions/index';
 import Navbar from '../components/Navbar';
 import Chats from './Chats';
 import Messages from './Messages';
-
 
 class UserDashboard extends Component {
 
@@ -15,11 +15,7 @@ class UserDashboard extends Component {
         super(props);
 
         this.state = {
-            currentRoom: {
-                user: null,
-                currentRoomSlug: null,
-                isSelect: false,
-            }
+            activeUser: null
         }
 
         this.clickHandler = this.clickHandler.bind(this);
@@ -49,8 +45,7 @@ class UserDashboard extends Component {
 
     clickHandler(event, slug) {
         let roomSlug = `${slug}&${this.props.user.slug}`;
-        let name;
-        let admin;
+        let name, admin;
         if (!name || !admin) {
             name = `${slug} ${this.props.user.slug}`.split('-').join(' ').toUpperCase();
             admin = undefined;
@@ -63,20 +58,12 @@ class UserDashboard extends Component {
             slug: roomSlug,
         }
 
-        this.props.createRoom(roomInfo);
-        // this.props.createdRoom();
-        socket.on('createdroom', (roomId) => {
-            window.history.pushState({}, null, `/chats/?room=${roomId}`);
+        this.props.sendCreateRoom(roomInfo);
+        socket.on('createdroom', (roomId) => this.props.createdRoom(roomId));
+        let activeUser = this.props.users.filter(user => user.slug === slug);
+        this.setState({
+            activeUser: activeUser[0]
         });
-        const currentUser = [...this.props.users].filter(user => user.slug === slug);
-
-        // this.setState({
-        //     currentRoom: {
-        //         user: currentUser[0],
-        //         currentUser: roomSlug,
-        //         isSelect: true
-        //     }
-        // });
     }
 
     render() {
@@ -90,12 +77,12 @@ class UserDashboard extends Component {
                     />
                 </aside>
                 <section className="flex-none w-4/12 px-8 pt-7">
-                    <Chats key="chat" clicked={this.clickHandler} />
+                    <Chats activeUser={this.state.activeUser ? this.state.activeUser.slug : null} clicked={this.clickHandler} />
                 </section>
                 <section className="flex-none w-6/12 pr-8 pt-7">
-                    {this.state.currentRoom.isSelect ?
+                    {this.state.activeUser ?
                         <Messages
-                            activeRoomUser={this.state.currentRoom.user} />
+                            activeRoomUser={this.state.activeUser} />
                         : null}
                 </section>
             </main>
@@ -113,7 +100,8 @@ const mapStateToProps = state => {
     return {
         isAuthenticated: state.auth.isAuthenticated,
         user: state.auth.user,
-        users: state.chat.users
+        users: state.chat.users,
+        room: state.chat.room
     }
 }
 
@@ -124,7 +112,8 @@ const mapDispatchToProps = dispatch => {
         socketConnect: (user) => dispatch(actions.socketConnect(user)),
         joinedServer: (userId) => dispatch(actions.joinedServer(userId)),
         fetchUser: (currentUserId) => dispatch(actions.fetchUser(currentUserId)),
-        createRoom: (room) => dispatch(actions.createRoom(room)),
+        sendCreateRoom: (room) => dispatch(actions.sendCreateRoom(room)),
+        createdRoom: (roomId) => dispatch(actions.createdRoom(roomId))
     }
 }
 

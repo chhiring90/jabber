@@ -19,14 +19,11 @@ exports.onJoinServer = socket => async (data, callback) => {
 
 exports.onCreateRoom = socket => async (roomInfo, callback) => {
     try {
-
         const { name, admin, slug , userId} = roomInfo;
-        console.log(name, admin, slug, "[ONCREATEROOM]");
 
         const slugArr = slug.split('&');
         const slugRevert = `${slugArr[1]}&${slugArr[0]}`;
-        let room = await Room.findOne({ slug: slug && slugRevert });
-        
+        let room = await Room.findOne({ slug: {$in: [slugRevert, slug]}});
         if (!room) {
             room = await Room.create({ slug, name, admin });
         }
@@ -36,13 +33,10 @@ exports.onCreateRoom = socket => async (roomInfo, callback) => {
             userRoom = await UserRoom.create({
                 userId,
                 roomId: room._id
-            })
+            });
         }
-        socket.join(room._id);
         socket.emit('createdroom', room._id);
         socket.roomId = room._id;
-        console.log(room, '[Room Created]');
-        // const 
     } catch (err) {
         console.log(err)
     }

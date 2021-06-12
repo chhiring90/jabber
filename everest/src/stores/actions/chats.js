@@ -25,22 +25,23 @@ const fetchUserFail = (error) => {
     }
 }
 
-const createRoomStart = () => {
+const createdRoomStart = () => {
     return {
         type: actionTypes.CREATE_ROOM,
     }
 }
 
-const createRoomSuccess = (slugs) => {
+const createdRoomSuccess = (room) => {
     return {
         type: actionTypes.CREATE_ROOM_SUCCESS,
-        slugs 
+        room 
     }
 }
 
-const createRoomFail = () => {
+const createdRoomFail = (error) => {
     return {
         type: actionTypes.CREATE_ROOM_FAIL,
+        error
     }
 }
 
@@ -60,11 +61,23 @@ export const fetchUser = (currentUserId) => {
     }
 }
 
-export const createRoom = (roomInfo) => {
+export const sendCreateRoom = (roomInfo) => {
     return dispatch => {
-        dispatch(createRoomStart());
         socket.emit('createroom', roomInfo);
-        console.log('[Emit Create Room]');
-        dispatch(createRoomSuccess());
+    }
+}
+
+export const createdRoom = (roomId) => {
+    return dispatch => {
+        dispatch(createdRoomStart());
+        window.history.pushState({}, null, `/chats/?room=${roomId}`);
+        axios.get(`/rooms/${roomId}`).then(res => {
+            if(res.data.status === 'success'){
+                dispatch(createdRoomSuccess(res.data.data));
+            }
+        }).catch(err => {
+            console.log(err.response.data.message);
+            dispatch(createdRoomFail(err.response.data.message));
+        });
     }
 }

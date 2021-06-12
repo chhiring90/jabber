@@ -2,11 +2,11 @@ import React from 'react';
 import Avatar from './Avatar';
 import Badge from './Badge';
 
-const Chat = ({status, name, clicked}) => {
+const Chat = ({status, name, clicked, active}) => {
     return (
         <div
             onClick={clicked}
-            className="shadow-chat relative select-none cursor-pointer rounded-md transition border-2 border-transparent bg-white px-7 py-7 min-h-chat mb-9 hover:bg-brand-gray-100">
+            className={`shadow-chat relative select-none cursor-pointer rounded-md transition border-2 border-transparent px-7 py-7 min-h-chat mb-9 ${active ? 'bg-brand-gray-100' : 'bg-white '}`}>
             <Avatar 
                 status={status} 
                 typing={true}

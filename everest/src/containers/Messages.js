@@ -59,7 +59,6 @@ class Messages extends Component {
                 wrap: 'flex-auto',
             },
         }
-        console.log(this.props.activeRoomUser, '[Messages]');
 
         return(
             <div className="flex flex-wrap w-100 shadow-message">

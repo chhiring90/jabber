@@ -48,6 +48,7 @@ class Chats extends Component {
         const chats = this.props.users.map(user => {
             return <Chat
                 clicked={(event, slug) => this.props.clicked(event, user.slug)}
+                active={user.slug === this.props.activeUser}
                 key={user._id}
                 status={`${user.active ? "online" : 'offline'}`}
                 name={user.name}
