@@ -49,17 +49,34 @@ class UserDashboard extends Component {
 
     clickHandler(event, slug) {
         let roomSlug = `${slug}&${this.props.user.slug}`;
-        window.history.pushState({}, null, `/?room=${roomSlug}`);
+        let name;
+        let admin;
+        if (!name || !admin) {
+            name = `${slug} ${this.props.user.slug}`.split('-').join(' ').toUpperCase();
+            admin = undefined;
+        }
 
-        this.props.createRoom(roomSlug);
-        const currentUser = [...this.props.users].filter(user => user.slug === slug);
-        this.setState({
-            currentRoom: {
-                user: currentUser[0],
-                currentUser: roomSlug,
-                isSelect: true
-            }
+        const roomInfo = {
+            userId: this.props.user._id,
+            name,
+            admin,
+            slug: roomSlug,
+        }
+
+        this.props.createRoom(roomInfo);
+        // this.props.createdRoom();
+        socket.on('createdroom', (roomId) => {
+            window.history.pushState({}, null, `/chats/?room=${roomId}`);
         });
+        const currentUser = [...this.props.users].filter(user => user.slug === slug);
+
+        // this.setState({
+        //     currentRoom: {
+        //         user: currentUser[0],
+        //         currentUser: roomSlug,
+        //         isSelect: true
+        //     }
+        // });
     }
 
     render() {

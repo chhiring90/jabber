@@ -60,12 +60,11 @@ export const fetchUser = (currentUserId) => {
     }
 }
 
-export const createRoom = (slugs) => {
+export const createRoom = (roomInfo) => {
     return dispatch => {
         dispatch(createRoomStart());
-        socket.emit('createRoom', slugs, err => {
-            dispatch(createRoomFail(err));
-        });
+        socket.emit('createroom', roomInfo);
+        console.log('[Emit Create Room]');
         dispatch(createRoomSuccess());
     }
 }

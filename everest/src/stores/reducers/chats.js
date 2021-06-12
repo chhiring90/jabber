@@ -24,7 +24,7 @@ const fetchUserFail = (state, action) => {
     return updateObject(state, {
         loading: false,
         error: action.error
-    })
+    });
 }
 
 const reducer = (state = initialState, action) => {

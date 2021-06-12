@@ -5,7 +5,10 @@ const roomSchema = new mongoose.Schema({
         type: String,
         required: [true, 'A Room must have a name']
     },
-    createAt: Date,
+    createdAt: {
+        type: Date,
+        default: Date.now()
+    },
     admin: {
         type: mongoose.Schema.ObjectId,
         ref: 'User'

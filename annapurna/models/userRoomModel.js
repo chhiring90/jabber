@@ -5,11 +5,14 @@ const userRoomSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'User'
     },
-    groupId: {
+    roomId: {
         type: mongoose.Schema.ObjectId,
-        ref: 'Group'
+        ref: 'Room'
     },
-    createAt: Date,
+    createdAt: {
+        type: Date,
+        default: Date.now()
+    },
     isActive: {
         type: Boolean,
         default: true

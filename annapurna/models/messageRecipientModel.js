@@ -5,9 +5,9 @@ const messageRecipientSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'User',
     },
-    recipientGroup: {
+    recipientRoom: {
         type: mongoose.Schema.ObjectId,
-        ref: 'Group',
+        ref: 'Room',
     },
     message: {
         type: mongoose.Schema.ObjectId,
