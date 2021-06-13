@@ -57,16 +57,18 @@ class Messages extends Component {
     componentDidMount() {
         socket.on('message', (message) => {
             console.log(message, '[MESSAGEROOM]');
-            console.log('messaged');
-            this.setState({messages: message});
+            const oldMessages = this.state.messages;
+            let updateMessages = oldMessages.concat(message);
+            this.setState({ messages: updateMessages });
         });
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
+
     }
 
     componentWillUnmount() {
-
+        socket.off();
     }
 
     onChangeHandler(event, controlName) {
@@ -132,6 +134,15 @@ class Messages extends Component {
                         touched={input.touched} />
                 }))
             .reduce((acc, el) => acc.concat(el), []);
+            
+        const messages = this.state.messages.map((msg, i) => {
+            return <Message
+                key={i}
+                messageBody={msg.messageBody}
+                userCurrent={this.props.user._id === msg.creator} />;
+        });
+
+
 
         return (
             <div className="flex flex-wrap w-100 shadow-message">
@@ -141,7 +152,7 @@ class Messages extends Component {
                     />
                 </div>
                 <SimpleBar className="flex-full h-message max-h-message p-5">
-                    <Message />
+                    {this.state.messages ? messages : null}
                 </SimpleBar>
                 <div className="border-brand-gray-400 border-t-2 flex-full">
                     <form
@@ -149,9 +160,9 @@ class Messages extends Component {
                         onSubmit={(event) => this.onSubmitHandler(event)}>
                         {messageForm}
                         <div className="flex items-center justify-center">
-                            <Button 
-                            type="submit" 
-                            customClass="rounded-full shadow-send transform -rotate-45 bg-brand-primary flex justify-center align-center w-10 h-10 items-center focus:outline-none ">
+                            <Button
+                                type="submit"
+                                customClass="rounded-full shadow-send transform -rotate-45 bg-brand-primary flex justify-center align-center w-10 h-10 items-center focus:outline-none ">
                                 <AiOutlineSend className="w-5 h-5 text-white" />
                             </Button>
                         </div>

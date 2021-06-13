@@ -7,13 +7,13 @@ const chalk = require('chalk');
 
 dotenv.config({ path: `${path.join(__dirname, './config.env')}` });
 const app = require('./app');
-const socketio = require('./socketio');
+const socketHandler = require('./controllers/socketController');
 
 const server = http.createServer(app);
 const io =  socket(server);
 
 const onConnection = sock => {
-    socketio(io, sock);
+    socketHandler(io, sock);
 }
 
 io.on('connection', onConnection);
