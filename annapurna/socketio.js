@@ -1,9 +1,10 @@
 const socketController = require('./controllers/socketController');
 
-module.exports = io => io.on('connection', socket => {
+module.exports = (io, socket) => {
     console.log('We have new connection');
 
-    socket.on('joinserver', socketController.onJoinServer(socket));
-    socket.on('createroom', socketController.onCreateRoom(socket))
-    socket.on('disconnect', socketController.onDisconnect(socket));
-});
+    socket.on('joinserver', socketController.onJoinServer(io, socket));
+    socket.on('createroom', socketController.onCreateRoom(io, socket));
+    socket.on('message', socketController.onMessage(io, socket));
+    socket.on('disconnect', socketController.onDisconnect(io, socket));
+};

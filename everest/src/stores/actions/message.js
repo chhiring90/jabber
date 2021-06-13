@@ -25,5 +25,8 @@ const sendMessageFail = (error) => {
 
 
 const sendMessage = (message) => {
-    
+    return dispatch => {
+        dispatch(sendMessageStart());
+        
+    }
 }

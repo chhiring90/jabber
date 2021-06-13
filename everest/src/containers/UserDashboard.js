@@ -33,7 +33,7 @@ class UserDashboard extends Component {
     }
 
     componentWillUnmount() {
-        socket.off();
+        socket.disconnect();
         if (!this.props.isAuthenticated) {
             this.props.setAuthPathRedirect();
         }

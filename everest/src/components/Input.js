@@ -54,6 +54,10 @@ const Input = ({
         classes.wrap.push('relative flex-shrink-0 mb-0');
     }
 
+    const onKeyPressTextarea = (event) => {
+        if(event.key === 'Enter' && !event.shiftKey) event.preventDefault();
+    }
+
     switch (elementType) {
         case 'input':
             inputElement = <input
@@ -83,7 +87,8 @@ const Input = ({
                 <textarea
                     className={classes.input.join(' ')}
                     {...elementConfig}
-                    onChange={changed}>
+                    onChange={changed}
+                    onKeyPress={(event) => onKeyPressTextarea(event)}>
                 </textarea>);
             break;
         default: break;

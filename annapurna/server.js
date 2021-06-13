@@ -10,9 +10,13 @@ const app = require('./app');
 const socketio = require('./socketio');
 
 const server = http.createServer(app);
-const io = socket(server);
+const io =  socket(server);
 
-socketio(io);
+const onConnection = sock => {
+    socketio(io, sock);
+}
+
+io.on('connection', onConnection);
 
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
 

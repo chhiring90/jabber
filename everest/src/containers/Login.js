@@ -85,9 +85,9 @@ class Login extends Component {
 
     inputChangeHandler = (event, controlName) => {
         const isCheckGroup = ['checkbox', 'radio'].includes[event.target.type];
-        let checkboxValue = event.target.checked ? 'true' : 'false';
+        // let checkboxValue = event.target.checked ? 'true' : 'false';
 
-        let value = isCheckGroup ? checkboxValue : event.target.value;
+        let value = isCheckGroup ? event.target.checked : event.target.value;
         const updateControls = {
             ...this.state.formData,
             [controlName]: {

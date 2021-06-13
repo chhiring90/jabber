@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 import axios from '../axios-api';
+import socket from '../socket';
 
 import Avatar from '../components/Avatar';
 import Message from '../components/Message';
@@ -11,13 +12,19 @@ import { AiFillFileImage, AiOutlineSend } from 'react-icons/ai';
 import Button from '../components/Button';
 
 class Messages extends Component {
+
+    constructor(props) {
+        super(props);
+        this.onSubmitHandler = this.onSubmitHandler.bind(this);
+    }
+
     state = {
         messages: [],
         formData: {
             imageUpload: {
                 elementType: 'input',
                 value: '',
-                label: <AiFillFileImage className="w-6 h-6 text-white"/>,
+                label: <AiFillFileImage className="w-6 h-6 text-white" />,
                 elementConfig: {
                     id: 'image-upload',
                     name: 'image-upload',
@@ -36,6 +43,7 @@ class Messages extends Component {
                     placeholder: 'Type a message here',
                     id: 'textarea',
                     name: 'textarea',
+                    type: 'textarea'
                 },
                 validation: {
                     required: false,
@@ -47,51 +55,106 @@ class Messages extends Component {
     }
 
     componentDidMount() {
+        socket.on('message', (message) => {
+            console.log(message, '[MESSAGEROOM]');
+            console.log('messaged');
+            this.setState({messages: message});
+        });
+    }
+
+    componentDidUpdate(){
     }
 
     componentWillUnmount() {
+
+    }
+
+    onChangeHandler(event, controlName) {
+        const updatedFormData = {
+            ...this.state.formData,
+            [controlName]: {
+                ...this.state.formData[controlName],
+                value: event.target.value
+            }
+        };
+        this.setState({ formData: updatedFormData });
+    }
+
+    clearInputValues() {
+        const formObjKey = Object.keys(this.state.formData).map(key => key);
+        const formData = { ...this.state.formData };
+        formObjKey.forEach(el => formData[el].value = '');
+        this.setState({ formData });
+    }
+
+    onSubmitHandler(event) {
+        event.preventDefault();
+        const { imageUpload, textarea } = this.state.formData;
+
+        const filterValue = [imageUpload, textarea].filter(el => el.value !== '');
+        let parentMessageId = undefined;
+
+        if (filterValue.length !== 0) {
+            socket.emit('message', {
+                messageBody: filterValue[0].value,
+                creator: this.props.user._id,
+                parentMessage: parentMessageId,
+                recipientRoom: window.location.search.split('=')[1]
+            });
+        }
+        this.clearInputValues();
+        event.target.reset();
     }
 
     render() {
-        let inputClass = {
+        const inputClass = {
             textarea: 'border-none rounded-none px-4 py-7 resize-none max-h-20 h-20 focus:ring-opacity-0 focus:ring-offset-0 font-semibold bg-white text-brand-gray',
             file: {
                 wrap: 'flex-auto',
-            },
+            }
         }
 
-        return(
+        const messageForm = Object.keys(this.state.formData)
+            .map(inputKey => [...Array(this.state.formData[inputKey])]
+                .map(input => {
+                    return <Input
+                        key={inputKey}
+                        value={input.value}
+                        changed={(event) => this.onChangeHandler(event, inputKey)}
+                        additionalWrapClass={inputKey === 'textarea' ? inputClass.file.wrap : null}
+                        additionalClass={inputKey === 'textarea' ? inputClass.textarea : null}
+                        elementType={input.elementType}
+                        elementConfig={input.elementConfig}
+                        label={input.label}
+                        invalid={!input.valid}
+                        require={input.require}
+                        shouldValidate={input.validation}
+                        touched={input.touched} />
+                }))
+            .reduce((acc, el) => acc.concat(el), []);
+
+        return (
             <div className="flex flex-wrap w-100 shadow-message">
                 <div className="bg-brand-gray-200 border-brand-gray-400 border-b-2 flex-full px-6 pt-6 pb-3">
-                    <Avatar size="medium" typing={false} 
-                    name={this.props.activeRoomUser.name}
+                    <Avatar size="medium" typing={false}
+                        name={this.props.activeRoomUser.name}
                     />
                 </div>
                 <SimpleBar className="flex-full h-message max-h-message p-5">
                     <Message />
                 </SimpleBar>
                 <div className="border-brand-gray-400 border-t-2 flex-full">
-                    <form className="flex flex-wrap even:flex-grow-1 bg-white px-4">
-                        {Object.keys(this.state.formData)
-                        .map(key => [...Array(this.state.formData[key])].map(input => {
-                            return <Input
-                            key={key}
-                            additionalWrapClass={key === 'textarea'? inputClass.file.wrap : null}
-                            additionalClass={key === 'textarea' ? inputClass.textarea : null}
-                            elementType={input.elementType}
-                            elementConfig={input.elementConfig}
-                            label={input.label}
-                            invalid={!input.valid}
-                            require={input.require}
-                            shouldValidate={input.validation}
-                            touched={input.touched}
-                            changed={event => event.target.value} />}
-                            ))}
-                            <div className="flex items-center justify-center">
-                                <Button customClass="rounded-full shadow-send transform -rotate-45 bg-brand-primary flex justify-center align-center w-10 h-10 items-center focus:outline-none ">
-                                    <AiOutlineSend className="w-5 h-5 text-white" />
-                                </Button>
-                            </div>
+                    <form
+                        className="flex flex-wrap even:flex-grow-1 bg-white px-4"
+                        onSubmit={(event) => this.onSubmitHandler(event)}>
+                        {messageForm}
+                        <div className="flex items-center justify-center">
+                            <Button 
+                            type="submit" 
+                            customClass="rounded-full shadow-send transform -rotate-45 bg-brand-primary flex justify-center align-center w-10 h-10 items-center focus:outline-none ">
+                                <AiOutlineSend className="w-5 h-5 text-white" />
+                            </Button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -107,7 +170,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        
+
     }
 }
 

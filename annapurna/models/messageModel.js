@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 
 const messageSchema = new mongoose.Schema({
-    message: {
+    messageBody: {
         type: String,
     },
-    createAt: {
+    createdAt: {
         type: Date,
+        default: Date.now()
     },
     parentMessage: {
         type: mongoose.Schema.ObjectId,

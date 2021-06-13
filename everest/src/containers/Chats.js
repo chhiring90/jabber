@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 import { connect } from 'react-redux';
-import { createBrowserHistory } from 'history';
 import socket from '../socket';
 
 import Chat from '../components/Chat';
