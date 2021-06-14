@@ -10,6 +10,7 @@ import Message from '../components/Message';
 import Input from '../components/Input';
 import { AiFillFileImage, AiOutlineSend } from 'react-icons/ai';
 import Button from '../components/Button';
+import * as actions from '../stores/actions/index';
 
 class Messages extends Component {
 
@@ -55,20 +56,24 @@ class Messages extends Component {
     }
 
     componentDidMount() {
-        socket.on('message', (message) => {
+        socket.connect();
+        socket.on('connect', this.props.socketConnect(this.props.user));
+        socket.on('joinedserver', (userId) => this.props.joinedServer(userId));
+        socket.on('messagesend', (message) => {
             console.log(message, '[MESSAGEROOM]');
             const oldMessages = this.state.messages;
             let updateMessages = oldMessages.concat(message);
             this.setState({ messages: updateMessages });
+            console.log(socket);
+            console.log(socket.id);
         });
     }
 
     componentDidUpdate() {
-
     }
 
     componentWillUnmount() {
-        socket.off();
+        socket.disconnect();
     }
 
     onChangeHandler(event, controlName) {
@@ -142,8 +147,6 @@ class Messages extends Component {
                 userCurrent={this.props.user._id === msg.creator} />;
         });
 
-
-
         return (
             <div className="flex flex-wrap w-100 shadow-message">
                 <div className="bg-brand-gray-200 border-brand-gray-400 border-b-2 flex-full px-6 pt-6 pb-3">
@@ -181,7 +184,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-
+        socketConnect: (user) => dispatch(actions.socketConnect(user)),
+        joinedServer: (userId) => dispatch(actions.joinedServer(userId)),
     }
 }
 

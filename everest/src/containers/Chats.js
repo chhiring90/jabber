@@ -35,12 +35,12 @@ class Chats extends Component {
     }
 
     componentDidMount() {
-        if(!this.props.currentUserId) return;
         this.props.fetchUser(this.props.currentUserId);
+        if(!this.props.currentUserId) return;
     }
 
     componentWillUnmount() {
-        socket.off();
+        socket.disconnect();
     }
 
     render() {

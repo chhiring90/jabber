@@ -72,6 +72,7 @@ export const createdRoom = (roomId) => {
         dispatch(createdRoomStart());
         window.history.pushState({}, null, `/chats/?room=${roomId}`);
         axios.get(`/rooms/${roomId}`).then(res => {
+            console.log(res.data);
             if(res.data.status === 'success'){
                 dispatch(createdRoomSuccess(res.data.data));
             }

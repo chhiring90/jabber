@@ -29,7 +29,7 @@ class UserDashboard extends Component {
     }
 
     componentDidUpdate() {
-        socket.on('joinedserver', (userId) => this.props.joinedServer(userId));
+        // socket.on('joinedserver', (userId) => this.props.joinedServer(userId));
     }
 
     componentWillUnmount() {

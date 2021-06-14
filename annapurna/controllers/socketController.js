@@ -52,9 +52,10 @@ module.exports = (io, socket) => {
         }
     }
 
-    const onMessage = async (message, callback) => {
+    const onMessage = async (message) => {
         try {
-            const { creator, messageBody, parentMessage, recipientRoom, recipient } = message;
+            const { creator, messageBody, parentMessage, recipientRoom } = message;
+            // console.log(message);
             if (creator) {
                 await Message.create({
                     creator,
@@ -62,9 +63,9 @@ module.exports = (io, socket) => {
                     parentMessage
                 });
             }
-            console.log(socket.roomId);
             socket.join(recipientRoom);
-            io.to(socket.roomId).emit('message', message);
+            io.to(recipientRoom).emit('messagesend', message);
+            console.log(socket.rooms);
         } catch (err) {
             console.log(err);
         }
