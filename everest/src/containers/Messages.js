@@ -58,7 +58,7 @@ class Messages extends Component {
     componentDidMount() {
         socket.connect();
         socket.on('connect', this.props.socketConnect(this.props.user));
-        socket.on('joinedserver', (userId) => this.props.joinedServer(userId));
+        socket.emit('joinroom', {room: this.props.roomId, user: this.props.user});
         socket.on('messagesend', (message) => {
             console.log(message, '[MESSAGEROOM]');
             const oldMessages = this.state.messages;
@@ -178,14 +178,14 @@ class Messages extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        user: state.auth.user
+        user: state.auth.user,
+        // roomId: state.chat.room._id
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         socketConnect: (user) => dispatch(actions.socketConnect(user)),
-        joinedServer: (userId) => dispatch(actions.joinedServer(userId)),
     }
 }
 

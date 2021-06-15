@@ -45,6 +45,36 @@ const createdRoomFail = (error) => {
     }
 }
 
+const joinedServerStart = () => {
+    return {
+        type: actionTypes.SOCKET_JOINED_SERVER,
+        loading: true
+    }
+}
+
+const joinedServerSuccess = (userId) => {
+    return {
+        type: actionTypes.SOCKET_JOINED_SUCCESS,
+        loading: false,
+        userId
+    }
+}
+
+const joinedServeFail = (error) => {
+    return {
+        type: actionTypes.SOCKET_JOINED_FAIL,
+        loading: false,
+        error
+    }
+}
+
+const disconnectSuccessful = (userId) => {
+    return {
+        type: actionTypes.SOCKET_DISCONNECT_SERVER,
+        userId
+    }
+}
+
 export const fetchUser = (currentUserId) => {
     return dispatch => {
         dispatch(fetchUserStart());
@@ -58,6 +88,21 @@ export const fetchUser = (currentUserId) => {
             console.log(err.response.data.message);
             dispatch(fetchUserFail(err.response.data.message));
         });
+    }
+}
+
+export const joinedServer = (userId) => {
+    return dispatch => {
+        dispatch(joinedServerStart());
+        if(!userId) return dispatch(joinedServeFail());
+        dispatch(joinedServerSuccess(userId));
+    }
+}
+
+export const disconnectServer = (userId) => {
+    return dispatch => {
+        console.log(userId, 'Left the server');
+        dispatch(disconnectSuccessful(userId));
     }
 }
 

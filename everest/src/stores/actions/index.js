@@ -4,13 +4,14 @@ export {
     checkAuthState,
     setAuthPathRedirect,
     logout,
-    joinedServer
 } from './auth';
 
 export {
     fetchUser,
     sendCreateRoom,
-    createdRoom
+    createdRoom,
+    joinedServer,
+    disconnectServer
 } from './chats';
 
 export {

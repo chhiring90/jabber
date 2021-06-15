@@ -1,4 +1,4 @@
-import * as actions from '../actions/actionTypes';
+import * as actionTypes from '../actions/actionTypes';
 import { updateObject } from '../../shared/utilty';
 
 const initialState = {
@@ -48,14 +48,60 @@ const createRoomFail = (state, action) => {
     })
 }
 
+const joinedServer = (state, action) => {
+    return updateObject(state, {
+        loading: action.loading
+    });
+};
+
+const joinedServerSuccess = (state, action) => {
+    let updatedUser = [...state.users].map(user => {
+        if (user._id === action.userId) {
+            console.log(user.name, 'Joined Server Successfully');
+            user.active = true;
+        }
+        return user;
+    });
+
+    return updateObject(state, {
+        users: updatedUser,
+        loading: action.loading,
+    });
+};
+
+
+const joinedServerFail = (state, action) => {
+    return updateObject(state, {
+        loading: action.loading,
+        error: action.error
+    })
+};
+
+const disconnectServer = (state, action) => {
+    const updatedUser = [...state.users].map(user => {
+        if(user._id === action.userId){
+            user.active = false;
+        }
+        return user;
+    });
+
+    return updateObject(state, {
+        users: updatedUser,
+    });
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actions.FETCH_USER: return fetchUser(state, action);
-        case actions.FETCH_USER_SUCCESS: return fetchUserSuccess(state, action);
-        case actions.FETCH_USER_FAIL: return fetchUserFail(state, action);
-        case actions.CREATE_ROOM: return createRoom(state, action);
-        case actions.CREATE_ROOM_SUCCESS: return createRoomSuccess(state, action);
-        case actions.CREATE_ROOM_FAIL: return createRoomFail(state, action);
+        case actionTypes.FETCH_USER: return fetchUser(state, action);
+        case actionTypes.FETCH_USER_SUCCESS: return fetchUserSuccess(state, action);
+        case actionTypes.FETCH_USER_FAIL: return fetchUserFail(state, action);
+        case actionTypes.SOCKET_JOINED_SERVER: return joinedServer(state, action);
+        case actionTypes.SOCKET_JOINED_SUCCESS: return joinedServerSuccess(state, action);
+        case actionTypes.SOCKET_JOINED_FAIL: return joinedServerFail(state, action);
+        case actionTypes.CREATE_ROOM: return createRoom(state, action);
+        case actionTypes.CREATE_ROOM_SUCCESS: return createRoomSuccess(state, action);
+        case actionTypes.CREATE_ROOM_FAIL: return createRoomFail(state, action);
+        case actionTypes.SOCKET_DISCONNECT_SERVER: return disconnectServer(state, action);
         default: return state;
     }
 }

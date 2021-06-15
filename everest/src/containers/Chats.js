@@ -30,13 +30,9 @@ class Chats extends Component {
         }
     }
 
-    componentDidUpdate() {
-        socket.on('joinedserver', (userId) => this.props.fetchUser(userId));
-    }
-
     componentDidMount() {
+        socket.connect();
         this.props.fetchUser(this.props.currentUserId);
-        if(!this.props.currentUserId) return;
     }
 
     componentWillUnmount() {
@@ -49,14 +45,14 @@ class Chats extends Component {
                 clicked={(event, slug) => this.props.clicked(event, user.slug)}
                 active={user.slug === this.props.activeUser}
                 key={user._id}
-                status={`${user.active ? "online" : 'offline'}`}
+                status={`${user.active ? "online" : 'inactive'}`}
                 name={user.name}
             />
         });
 
         return (
             <>
-                <div className="flex mb-5 flex-wrap">
+                <div className="flex mb-5 flex-wrap" key="chat-wrapper">
                     <div className="flex-auto w-3/5 font-semibold tracking-wider">
                         <h2 className="text-4xl font-bold">Chats</h2>
                         <p>Recent Chats</p>
@@ -103,7 +99,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchUser: (currentUserId) => dispatch(action.fetchUser(currentUserId))
+        fetchUser: (currentUserId) => dispatch(action.fetchUser(currentUserId)),
+        joinedServer: (userId) => dispatch(action.joinedServer(userId)),
     }
 }
 

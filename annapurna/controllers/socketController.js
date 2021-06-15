@@ -12,10 +12,10 @@ module.exports = (io, socket) => {
 
     const onJoinServer = async (data, callback) => {
         try {
-            const user = await User.findByIdAndUpdate(data._id, { active: true });
+            const user = await User.findByIdAndUpdate(data._id, {active: true});
             if (!user) return callback();
             socket.userId = user._id;
-            socket.emit('joinedserver', user._id);
+            socket.broadcast.emit('joinedserver', user._id);
             callback();
         } catch (err) {
             console.log(err);
@@ -52,6 +52,15 @@ module.exports = (io, socket) => {
         }
     }
 
+    const onJoinRoom = async ({room, user}) => {
+        try {
+            socket.join(room);
+            socket.broadcast.to(room).emit('messagesend', )
+        }catch(err){
+            console.log(err);
+        }
+    }
+
     const onMessage = async (message) => {
         try {
             const { creator, messageBody, parentMessage, recipientRoom } = message;
@@ -71,9 +80,11 @@ module.exports = (io, socket) => {
         }
     }
 
-    const onDisconnect = async (reason) => {
+    const onDisconnect = async (reason, callback) => {
         try {
             const user = await User.findByIdAndUpdate(socket.userId, { active: false });
+            if(!user) callback();
+            socket.broadcast.emit('disconnectserver', socket.userId);
             console.log({ reason, user }, socket.userId, 'onDisconnect');
         } catch (err) {
             console.log(err);
@@ -82,6 +93,7 @@ module.exports = (io, socket) => {
 
     socket.on('joinserver', onJoinServer);
     socket.on('createroom', onCreateRoom);
+    socket.on('joinroom', onJoinRoom);
     socket.on('message', onMessage);
     socket.on('disconnect', onDisconnect);
 };

@@ -25,7 +25,8 @@ class UserDashboard extends Component {
     componentDidMount() {
         socket.connect();
         socket.on('connect', this.props.socketConnect(this.props.user));
-        socket.on('joinedserver', (userId) => this.props.joinedServer(userId));
+        socket.on('joinedserver',(userId) => this.props.joinedServer(userId));
+        socket.on('disconnectserver', (userId) => this.props.disconnectServer(userId));
     }
 
     componentDidUpdate() {
@@ -77,7 +78,9 @@ class UserDashboard extends Component {
                     />
                 </aside>
                 <section className="flex-none w-4/12 px-8 pt-7">
-                    <Chats activeUser={this.state.activeUser ? this.state.activeUser.slug : null} clicked={this.clickHandler} />
+                    <Chats
+                        activeUser={this.state.activeUser ? this.state.activeUser.slug : null}
+                        clicked={this.clickHandler} />
                 </section>
                 <section className="flex-none w-6/12 pr-8 pt-7">
                     {this.state.activeUser ?
@@ -111,6 +114,7 @@ const mapDispatchToProps = dispatch => {
         onLogout: () => dispatch(actions.logout()),
         socketConnect: (user) => dispatch(actions.socketConnect(user)),
         joinedServer: (userId) => dispatch(actions.joinedServer(userId)),
+        disconnectServer: (userId) => dispatch(actions.disconnectServer(userId)),
         fetchUser: (currentUserId) => dispatch(actions.fetchUser(currentUserId)),
         sendCreateRoom: (room) => dispatch(actions.sendCreateRoom(room)),
         createdRoom: (roomId) => dispatch(actions.createdRoom(roomId))

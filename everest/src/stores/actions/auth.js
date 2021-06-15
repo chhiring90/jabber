@@ -75,29 +75,6 @@ export const setAuthPathRedirect = (path) => {
     }
 };
 
-const joinedServerStart = () => {
-    return {
-        type: actionTypes.SOCKET_JOINED_SERVER,
-        loading: true
-    }
-}
-
-const joinedServerSuccess = (active) => {
-    return {
-        type: actionTypes.SOCKET_JOINED_SUCCESS,
-        loading: false,
-        active
-    }
-}
-
-const joinedServeFail = (error) => {
-    return {
-        type: actionTypes.SOCKET_JOINED_FAIL,
-        loading: false,
-        error
-    }
-}
-
 export const signup = (name, email, password, passwordConfirm) => {
     return dispatch => {
         dispatch(signupStart());
@@ -167,13 +144,3 @@ export const checkAuthState = () => {
     }
 }
 
-export const joinedServer = (userId) => {
-    return dispatch => {
-        dispatch(joinedServerStart());
-        axios.get(`/users/${userId}`)
-            .then(res => {
-                dispatch(joinedServerSuccess(res.data.data.active));
-            })
-            .catch(err => dispatch(joinedServeFail(err)));
-    }
-}
