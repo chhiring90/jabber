@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import uuid from 'react-uuid';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
 
 import { FormSection, FormContainer, FormGraphic } from '../hoc/FormLayout';
 import AuthForm from '../components/AuthForm';
+import Dialog from '../components/Dialog';
 import * as actions from '../stores/actions/index';
 import { checkValidation } from '../shared/utilty';
-import { Redirect } from 'react-router';
 
 class Login extends Component {
 
@@ -73,7 +74,8 @@ class Login extends Component {
             linkContent: "Create an account",
             children: 'Not registered yet ? '
         },
-        isLoginForm: true
+        isLoginForm: true,
+        showDialog: false
     }
 
     formSubmitHandler = (event) => {
@@ -81,6 +83,7 @@ class Login extends Component {
 
         const { email, password } = this.state.formData;
         this.props.onLogin(email.value, password.value);
+        this.setState({ showDialog: true });
     }
 
     inputChangeHandler = (event, controlName) => {
@@ -105,28 +108,37 @@ class Login extends Component {
         if (this.props.isAuthenticated && !['/signup', '/login'].includes(this.props.authRedirectPath)) {
             this.props.setAuthPathRedirect();
         }
+        // console.log(this.props.message);
     }
 
     render() {
         let renderComponent = (
-        <FormSection>
-            <FormContainer>
-                <AuthForm
-                    changed={this.inputChangeHandler}
-                    formData={this.state.formData}
-                    submit={this.formSubmitHandler}
-                    message={this.props.message}
-                    isLoading={this.props.isLoading}
-                    formTitle={this.state.formTitle}
-                    isLoginForm={this.state.isLoginForm} />
-            </FormContainer>
-            <FormGraphic></FormGraphic>
-        </FormSection>);
+            <>
+                {this.state.showDialog ?
+                    <Dialog
+                        messageType={this.props.message[0]}
+                        messageText={this.props.message[1]}
+                        show={this.state.showDialog} /> : null}
+                <FormSection>
+                    <FormContainer>
+                        <AuthForm
+                            changed={this.inputChangeHandler}
+                            formData={this.state.formData}
+                            submit={this.formSubmitHandler}
+                            message={this.props.message}
+                            isLoading={this.props.isLoading}
+                            formTitle={this.state.formTitle}
+                            isLoginForm={this.state.isLoginForm} />
+                    </FormContainer>
+                    <FormGraphic></FormGraphic>
+                </FormSection>
+            </>
+        );
 
         if (this.props.isAuthenticated && !['/signup', '/login'].includes(this.props.authRedirectPath)) {
             renderComponent = <Redirect to={this.props.authRedirectPath} />
         }
-        
+
         return renderComponent;
     }
 }

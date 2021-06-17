@@ -41,6 +41,7 @@ class UserDashboard extends Component {
 
     onLogoutHandler(e) {
         this.props.onLogout();
+        window.location.reload();
     }
 
     // clickHandler(event, slug) {

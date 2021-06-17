@@ -63,12 +63,6 @@ class Chats extends Component {
         // this.props.sendCreateRoom(roomInfo);
         socket.emit('createroom', roomInfo);
         socket.on('createdroom', (room) => this.props.createdRoom(room, slug));
-        // if (this.props.activeRoom) {
-            // console.log(this.props.activeRoom);
-            // socket.emit('joinroom', { room: this.props.activeRoom._id, user: this.props.user });
-            // socket.on('messagesend', (message) => console.log(message, '[MESSAGESEND]'));
-        // }
-        // console.log(this.props.activeRoom._id);
     }
 
     componentWillUnmount() {
