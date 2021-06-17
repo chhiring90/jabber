@@ -12,7 +12,7 @@ module.exports = (io, socket) => {
 
     const onJoinServer = async (data, callback) => {
         try {
-            const user = await User.findByIdAndUpdate(data._id, {active: true});
+            const user = await User.findByIdAndUpdate(data._id, { active: true });
             if (!user) return callback();
             socket.userId = user._id;
             socket.broadcast.emit('joinedserver', user._id);
@@ -24,9 +24,8 @@ module.exports = (io, socket) => {
 
     const onCreateRoom = async (roomInfo, callback) => {
         try {
-            const { name, admin, slug, userId } = roomInfo;
-
-            if (!slug) callback();
+            const { name, admin, slug, userId, userSlug, currentUserSlug } = roomInfo;
+            if (!slug) return callback();
 
             const slugArr = slug.split('&');
             const slugRevert = `${slugArr[1]}&${slugArr[0]}`;
@@ -35,7 +34,7 @@ module.exports = (io, socket) => {
             if (!room) {
                 room = await Room.create({ slug, name, admin });
             }
-            
+
             let userRoom = await UserRoom.findOne({ userId, roomId: room._id });
             if (!userRoom) {
                 userRoom = await UserRoom.create({
@@ -43,9 +42,7 @@ module.exports = (io, socket) => {
                     roomId: room._id
                 });
             }
-            
-            socket.join(room._id);
-            socket.emit('createdroom', room._id);
+            socket.emit('createdroom', room);
             socket.roomId = room._id;
         } catch (err) {
             console.log(err);
@@ -54,8 +51,15 @@ module.exports = (io, socket) => {
 
     const onJoinRoom = async ({room, user}) => {
         try {
+            console.log(room, 'ONJOINROOM');
             socket.join(room);
-            socket.broadcast.to(room).emit('messagesend', )
+
+            const message = {
+                messageBody: `${user.name} joined conversation`,
+                creator: 'jabber-admin'
+            }
+
+            socket.broadcast.to(room).emit('messagesend', message);
         }catch(err){
             console.log(err);
         }
@@ -63,7 +67,7 @@ module.exports = (io, socket) => {
 
     const onMessage = async (message) => {
         try {
-            const { creator, messageBody, parentMessage, recipientRoom } = message;
+            const { creator, messageBody, parentMessage, recipientRoom, recipientId, messageId } = message;
             // console.log(message);
             if (creator) {
                 await Message.create({
@@ -72,6 +76,7 @@ module.exports = (io, socket) => {
                     parentMessage
                 });
             }
+
             socket.join(recipientRoom);
             io.to(recipientRoom).emit('messagesend', message);
             console.log(socket.rooms);
@@ -80,10 +85,9 @@ module.exports = (io, socket) => {
         }
     }
 
-    const onDisconnect = async (reason, callback) => {
+    const onDisconnect = async (reason) => {
         try {
             const user = await User.findByIdAndUpdate(socket.userId, { active: false });
-            if(!user) callback();
             socket.broadcast.emit('disconnectserver', socket.userId);
             console.log({ reason, user }, socket.userId, 'onDisconnect');
         } catch (err) {

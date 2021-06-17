@@ -4,6 +4,9 @@ const socket = require('socket.io');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const chalk = require('chalk');
+const debug = require('debug')('http');
+
+debug('booting %o', 'JABBER');
 
 dotenv.config({ path: `${path.join(__dirname, './config.env')}` });
 const app = require('./app');

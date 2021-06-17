@@ -12,6 +12,11 @@ import * as action from '../stores/actions/index';
 
 class Chats extends Component {
 
+    constructor(props) {
+        super(props);
+        this.clickHandler = this.clickHandler.bind(this);
+    }
+
     state = {
         searchbar: {
             elementType: 'input',
@@ -33,6 +38,37 @@ class Chats extends Component {
     componentDidMount() {
         socket.connect();
         this.props.fetchUser(this.props.currentUserId);
+        
+    }
+
+    componentDidUpdate() {
+    }
+
+    clickHandler(event, slug) {
+        event.preventDefault();
+        let roomSlug = `${slug}&${this.props.user.slug}`;
+        let name, admin;
+        if (!name || !admin) {
+            name = `${slug} ${this.props.user.slug}`.split('-').join(' ').toUpperCase();
+            admin = undefined;
+        }
+
+        const roomInfo = {
+            userId: this.props.user._id,
+            name,
+            admin,
+            slug: roomSlug,
+        }
+
+        // this.props.sendCreateRoom(roomInfo);
+        socket.emit('createroom', roomInfo);
+        socket.on('createdroom', (room) => this.props.createdRoom(room, slug));
+        // if (this.props.activeRoom) {
+            // console.log(this.props.activeRoom);
+            // socket.emit('joinroom', { room: this.props.activeRoom._id, user: this.props.user });
+            // socket.on('messagesend', (message) => console.log(message, '[MESSAGESEND]'));
+        // }
+        // console.log(this.props.activeRoom._id);
     }
 
     componentWillUnmount() {
@@ -42,7 +78,7 @@ class Chats extends Component {
     render() {
         const chats = this.props.users.map(user => {
             return <Chat
-                clicked={(event, slug) => this.props.clicked(event, user.slug)}
+                clicked={(event) => this.clickHandler(event, user.slug)}
                 active={user.slug === this.props.activeUser}
                 key={user._id}
                 status={`${user.active ? "online" : 'inactive'}`}
@@ -93,7 +129,9 @@ class Chats extends Component {
 const mapStateToProps = state => {
     return {
         users: state.chat.users,
+        user: state.auth.user,
         currentUserId: state.auth.user._id,
+        activeRoom: state.chat.activeChat.room
     }
 }
 
@@ -101,6 +139,8 @@ const mapDispatchToProps = dispatch => {
     return {
         fetchUser: (currentUserId) => dispatch(action.fetchUser(currentUserId)),
         joinedServer: (userId) => dispatch(action.joinedServer(userId)),
+        createdRoom: (room, slug) => dispatch(action.createdRoom(room, slug)),
+        sendCreateRoom: (room) => dispatch(action.sendCreateRoom(room)),
     }
 }
 

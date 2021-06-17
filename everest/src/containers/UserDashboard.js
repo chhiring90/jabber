@@ -18,7 +18,6 @@ class UserDashboard extends Component {
             activeUser: null
         }
 
-        this.clickHandler = this.clickHandler.bind(this);
         this.onLogoutHandler = this.onLogoutHandler.bind(this);
     }
 
@@ -44,28 +43,28 @@ class UserDashboard extends Component {
         this.props.onLogout();
     }
 
-    clickHandler(event, slug) {
-        let roomSlug = `${slug}&${this.props.user.slug}`;
-        let name, admin;
-        if (!name || !admin) {
-            name = `${slug} ${this.props.user.slug}`.split('-').join(' ').toUpperCase();
-            admin = undefined;
-        }
+    // clickHandler(event, slug) {
+    //     let roomSlug = `${slug}&${this.props.user.slug}`;
+    //     let name, admin;
+    //     if (!name || !admin) {
+    //         name = `${slug} ${this.props.user.slug}`.split('-').join(' ').toUpperCase();
+    //         admin = undefined;
+    //     }
 
-        const roomInfo = {
-            userId: this.props.user._id,
-            name,
-            admin,
-            slug: roomSlug,
-        }
-
-        this.props.sendCreateRoom(roomInfo);
-        socket.on('createdroom', (roomId) => this.props.createdRoom(roomId));
-        let activeUser = this.props.users.filter(user => user.slug === slug);
-        this.setState({
-            activeUser: activeUser[0]
-        });
-    }
+    //     const roomInfo = {
+    //         userId: this.props.user._id,
+    //         name,
+    //         admin,
+    //         slug: roomSlug,
+    //     }
+    //     console.log('CLICKED');
+    //     this.props.sendCreateRoom(roomInfo);
+    //     socket.on('createdroom', (roomId) => this.props.createdRoom(roomId));
+    //     let activeUser = this.props.users.filter(user => user.slug === slug);
+    //     this.setState({
+    //         activeUser: activeUser[0]
+    //     });
+    // }
 
     render() {
         let { name } = this.props.user;
@@ -80,12 +79,12 @@ class UserDashboard extends Component {
                 <section className="flex-none w-4/12 px-8 pt-7">
                     <Chats
                         activeUser={this.state.activeUser ? this.state.activeUser.slug : null}
-                        clicked={this.clickHandler} />
+                        />
                 </section>
                 <section className="flex-none w-6/12 pr-8 pt-7">
-                    {this.state.activeUser ?
+                    {this.props.activeChat.user ?
                         <Messages
-                            activeRoomUser={this.state.activeUser} />
+                            activeRoomUser={this.props.activeChat.user} />
                         : null}
                 </section>
             </main>
@@ -104,7 +103,8 @@ const mapStateToProps = state => {
         isAuthenticated: state.auth.isAuthenticated,
         user: state.auth.user,
         users: state.chat.users,
-        room: state.chat.room
+        room: state.chat.room,
+        activeChat: state.chat.activeChat
     }
 }
 

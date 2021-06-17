@@ -19,5 +19,14 @@ const userRoomSchema = new mongoose.Schema({
     }
 });
 
+// POPULATE MIDDLEWARE 
+userRoomSchema.pre(/^find/, function(next){
+    this.populate({
+        path: 'userId',
+        select: '-__v'
+    });
+    next();
+});
+
 const UserRoom = mongoose.model('UserRoom', userRoomSchema);
 module.exports = UserRoom;

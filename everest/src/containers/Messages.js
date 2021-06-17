@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import SimpleBar from 'simplebar-react';
+// import ScrollToBottom from 'react-scroll-to-bottom';
 import 'simplebar/dist/simplebar.min.css';
 import axios from '../axios-api';
 import socket from '../socket';
@@ -11,7 +12,7 @@ import Input from '../components/Input';
 import { AiFillFileImage, AiOutlineSend } from 'react-icons/ai';
 import Button from '../components/Button';
 import * as actions from '../stores/actions/index';
-
+const scrollBottomRef = React.createRef();
 class Messages extends Component {
 
     constructor(props) {
@@ -58,22 +59,23 @@ class Messages extends Component {
     componentDidMount() {
         socket.connect();
         socket.on('connect', this.props.socketConnect(this.props.user));
-        socket.emit('joinroom', {room: this.props.roomId, user: this.props.user});
+        socket.emit('joinroom', { room: this.props.roomId, user: this.props.user });
+        // socket.on('messagesend', (message) => console.log(message, '[MESSAGESEND]'));
         socket.on('messagesend', (message) => {
-            console.log(message, '[MESSAGEROOM]');
             const oldMessages = this.state.messages;
             let updateMessages = oldMessages.concat(message);
             this.setState({ messages: updateMessages });
-            console.log(socket);
-            console.log(socket.id);
         });
+        this.scrollToBottom();
     }
 
     componentDidUpdate() {
+        this.scrollToBottom();
     }
 
     componentWillUnmount() {
         socket.disconnect();
+        this.setState({messages: []});
     }
 
     onChangeHandler(event, controlName) {
@@ -84,6 +86,7 @@ class Messages extends Component {
                 value: event.target.value
             }
         };
+
         this.setState({ formData: updatedFormData });
     }
 
@@ -113,6 +116,16 @@ class Messages extends Component {
         event.target.reset();
     }
 
+    scrollToBottom() {
+        if(scrollBottomRef.current){
+            scrollBottomRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'end',
+                inline: 'nearest'
+            })
+        }
+    }
+
     render() {
         const inputClass = {
             textarea: 'border-none rounded-none px-4 py-7 resize-none max-h-20 h-20 focus:ring-opacity-0 focus:ring-offset-0 font-semibold bg-white text-brand-gray',
@@ -139,12 +152,17 @@ class Messages extends Component {
                         touched={input.touched} />
                 }))
             .reduce((acc, el) => acc.concat(el), []);
-            
+
         const messages = this.state.messages.map((msg, i) => {
+            let currentUser = null;
+            if (msg.creator === 'jabber-admin') {
+                currentUser = msg.creator;
+            }
+
             return <Message
                 key={i}
                 messageBody={msg.messageBody}
-                userCurrent={this.props.user._id === msg.creator} />;
+                userCurrent={currentUser ? currentUser : this.props.user._id === msg.creator} />;
         });
 
         return (
@@ -156,6 +174,7 @@ class Messages extends Component {
                 </div>
                 <SimpleBar className="flex-full h-message max-h-message p-5">
                     {this.state.messages ? messages : null}
+                    <div ref={scrollBottomRef} className="h-0.5" />
                 </SimpleBar>
                 <div className="border-brand-gray-400 border-t-2 flex-full">
                     <form

@@ -32,12 +32,11 @@ const socketConnectFail = (error) => {
 export const socketConnect = (user) => {
     return dispatch => {
         dispatch(socketConnectStart());
-        console.log('Socket connection on client successfully');
-        const {_id, slug} = user;
-        socket.emit('joinserver', {_id,slug},
-        err => {
+        const { _id, slug } = user;
+        socket.emit('joinserver', { _id, slug }, err => {
             dispatch(socketConnectFail(err));
         });
+        console.log('Socket connection on client successfully');
         dispatch(socketConnectSuccess());
     }
 }

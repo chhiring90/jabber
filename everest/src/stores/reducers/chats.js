@@ -5,48 +5,55 @@ const initialState = {
     loading: false,
     error: null,
     users: [],
-    room: null
+    activeChat: {
+        user: null,
+        room: null
+    }
 }
 
 const fetchUser = (state, action) => {
     return updateObject(state, {
         loading: action.loading
     });
-}
+};
 
 const fetchUserSuccess = (state, action) => {
     return updateObject(state, {
         loading: false,
         users: action.data
     });
-}
+};
 
 const fetchUserFail = (state, action) => {
     return updateObject(state, {
         loading: false,
         error: action.error
     });
-}
+};
 
 const createRoom = (state, action) => {
     return updateObject(state, {
         loading: true,
-    })
-}
+    });
+};
 
 const createRoomSuccess = (state, action) => {
+    let activeUser = state.users.filter(user => user.slug === action.slug)[0];
     return updateObject(state, {
         loading: false,
-        room: action.room
-    })
-}
+        activeChat: {
+            user:activeUser,
+            room: action.room
+        }
+    });
+};
 
 const createRoomFail = (state, action) => {
     return updateObject(state, {
         loading: false,
         error: action.error
-    })
-}
+    });
+};
 
 const joinedServer = (state, action) => {
     return updateObject(state, {
@@ -57,7 +64,7 @@ const joinedServer = (state, action) => {
 const joinedServerSuccess = (state, action) => {
     let updatedUser = [...state.users].map(user => {
         if (user._id === action.userId) {
-            console.log(user.name, 'Joined Server Successfully');
+            console.log(user.name, 'Joined Server Successfully [JOINEDSERVERSUCCESS]');
             user.active = true;
         }
         return user;
@@ -68,7 +75,6 @@ const joinedServerSuccess = (state, action) => {
         loading: action.loading,
     });
 };
-
 
 const joinedServerFail = (state, action) => {
     return updateObject(state, {

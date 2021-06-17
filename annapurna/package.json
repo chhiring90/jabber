@@ -6,7 +6,8 @@
     "scripts": {
         "dev": "nodemon server.js",
         "prod": "SET NODE_ENV=production&&nodemon server.js",
-        "debug": "ndb server.js"
+        "debug": "ndb server.js",
+        "socket": "SET DEBUG=*&&nodemon server.js"
     },
     "repository": {
         "type": "git",

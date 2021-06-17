@@ -31,10 +31,11 @@ const createdRoomStart = () => {
     }
 }
 
-const createdRoomSuccess = (room) => {
+const createdRoomSuccess = (room, slug) => {
     return {
         type: actionTypes.CREATE_ROOM_SUCCESS,
-        room 
+        room,
+        slug
     }
 }
 
@@ -79,7 +80,7 @@ export const fetchUser = (currentUserId) => {
     return dispatch => {
         dispatch(fetchUserStart());
         axios.get('/users').then(res => {
-            if(res.data.status === 'success'){
+            if (res.data.status === 'success') {
                 let users = [...res.data.data];
                 let filteredCurrentUser = users.filter(user => user.id !== currentUserId);
                 dispatch(fetchUserSuccess(filteredCurrentUser));
@@ -94,7 +95,7 @@ export const fetchUser = (currentUserId) => {
 export const joinedServer = (userId) => {
     return dispatch => {
         dispatch(joinedServerStart());
-        if(!userId) return dispatch(joinedServeFail());
+        if (!userId) return dispatch(joinedServeFail());
         dispatch(joinedServerSuccess(userId));
     }
 }
@@ -112,18 +113,11 @@ export const sendCreateRoom = (roomInfo) => {
     }
 }
 
-export const createdRoom = (roomId) => {
+export const createdRoom = (room, slug) => {
     return dispatch => {
         dispatch(createdRoomStart());
-        window.history.pushState({}, null, `/chats/?room=${roomId}`);
-        axios.get(`/rooms/${roomId}`).then(res => {
-            console.log(res.data);
-            if(res.data.status === 'success'){
-                dispatch(createdRoomSuccess(res.data.data));
-            }
-        }).catch(err => {
-            console.log(err.response.data.message);
-            dispatch(createdRoomFail(err.response.data.message));
-        });
+        window.history.pushState({}, null, `/chats/?room=${room._id}`);
+        if(!room) return dispatch(createdRoomFail('Something went wrong!'));
+        dispatch(createdRoomSuccess(room, slug));
     }
 }
