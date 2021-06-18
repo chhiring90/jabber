@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom';
 import { FormSection, FormContainer, FormGraphic } from '../hoc/FormLayout';
 import AuthForm from '../components/AuthForm';
 import * as actions from '../stores/actions/index';
-import { checkValidation } from '../shared/utilty';
+import { checkValidation, clearInputValues } from '../shared/utilty';
 
 class SignUp extends Component {
 
@@ -90,26 +90,17 @@ class SignUp extends Component {
             link: '/login',
             linkContent: "Login",
             children: 'Already have an account ? '
-        }
+        },
     }
-
-    // clearInputValues(state) {
-    //     const prevFormData = { ...state.formData };
-    //     const emptyValues = Object.keys(prevFormData)
-    //         .map(key => {
-    //             ...prevFormData[key], 
-    //             [key].value: ''}
-    //             );
-
-    //     this.setState({ formData: emptyValues });
-    // }
 
     onSubmitHandler = (event) => {
         event.preventDefault();
         const { name, email, password, passwordConfirm } = this.state.formData;
         this.props.onSignUp(name.value, email.value, password.value, passwordConfirm.value);
-
-        // this.clearInputValues(this.state);
+        this.setState({
+            formData: clearInputValues(this.state.formData)
+        });
+        // event.target.reset();
     }
 
     inputChangeHandler = (event, controlName) => {
@@ -167,7 +158,7 @@ const mapStateToProps = state => {
         isLoading: state.auth.loading,
         error: state.auth.error,
         isAuthenticated: state.auth.isAuthenticated,
-        message: state.auth.message,
+        message: state.auth.message.signup,
         authRedirectPath: state.auth.authRedirectPath,
     }
 }

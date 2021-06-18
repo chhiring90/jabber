@@ -7,6 +7,10 @@ const initialState = {
     loading: false,
     authRedirectPath: '/',
     isAuthenticated: false,
+    message: {
+        login: null,
+        signup: null
+    }
 };
 
 const authSignupStart = (state, action) => {
@@ -24,9 +28,12 @@ const authSignupSuccess = (state, action) => {
         {
             isAuthenticated: action.token || false,
             loading: false,
-            message: action.message,
             user: action.user,
-            isOnine: action.isOnine
+            isOnine: action.isOnine,
+            message: {
+                ...state.message,
+                signup: action.message
+            }
         }
     );
 };
@@ -34,7 +41,10 @@ const authSignupSuccess = (state, action) => {
 const authSignupFail = (state, action) => {
     return updateObject(
         state, {
-        message: action.message,
+        message: {
+            ...state.message,
+            signup: action.message
+        },
         loading: false,
     });
 };
@@ -49,16 +59,22 @@ const authLoginSuccess = (state, action) => {
     return updateObject(state, {
         isAuthenticated: action.token || false,
         loading: false,
-        message: action.message,
         user: action.user,
-        isOnine: action.isOnine
+        isOnine: action.isOnine,
+        message: {
+            ...state.message,
+            login: action.message
+        },
     });
 }
 
 const authLoginFail = (state, action) => {
     return updateObject(state, {
-        message: action.message,
-        loading: false
+        loading: false,
+        message: {
+            ...state.message,
+            login: action.message
+        },
     });
 }
 

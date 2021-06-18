@@ -1,7 +1,7 @@
 import React from 'react';
 import uuid from 'react-uuid';
 
-const Input = ({ 
+const Input = ({
     elementType,
     changed,
     value,
@@ -13,7 +13,8 @@ const Input = ({
     touched,
     additionalClass,
     fullWidth,
-    additionalWrapClass }) => {
+    additionalWrapClass,
+    require }) => {
 
     let inputElement = null;
     let classes = {
@@ -29,8 +30,8 @@ const Input = ({
     if (['checkbox', 'radio'].includes(elementConfig.type)) {
         classes.input.push('order-1');
         classes.label.push('order-2 mb-0 ml-2');
-    }else {
-        if(fullWidth){
+    } else {
+        if (fullWidth) {
             classes.wrap.push('w-full mb-4');
             classes.label.push('mb-2');
         }
@@ -44,23 +45,24 @@ const Input = ({
         classes.input.push(additionalClass);
     }
 
-    if(additionalWrapClass){
+    if (additionalWrapClass) {
         classes.wrap.push(additionalWrapClass)
     }
 
-    if(elementConfig.type === 'file'){
+    if (elementConfig.type === 'file') {
         classes.input.push('absolute inset-0 w-full h-full opacity-0');
         classes.label.push('w-10 h-10 rounded-full mx-auto bg-brand-primary flex items-center justify-center');
         classes.wrap.push('relative flex-shrink-0 mb-0');
     }
 
     const onKeyPressTextarea = (event) => {
-        if(event.key === 'Enter' && !event.shiftKey) event.preventDefault();
+        if (event.key === 'Enter' && !event.shiftKey) event.preventDefault();
     }
 
     switch (elementType) {
         case 'input':
             inputElement = <input
+                required={require}
                 className={classes.input.join(' ')}
                 {...elementConfig}
                 value={value}

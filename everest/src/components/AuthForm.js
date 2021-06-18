@@ -17,7 +17,7 @@ const AuthForm = ({ submit, formData, changed, isLoading, message, formTitle, is
                     elementConfig={input.elementConfig}
                     label={input.label}
                     invalid={!input.valid}
-                    require={input.require}
+                    require={input.validation.required}
                     shouldValidate={input.validation}
                     touched={input.touched}
                     changed={event => changed(event, key)}

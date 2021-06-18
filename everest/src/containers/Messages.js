@@ -9,6 +9,7 @@ import socket from '../socket';
 import Avatar from '../components/Avatar';
 import Message from '../components/Message';
 import Input from '../components/Input';
+import {clearInputValues} from '../shared/utilty';
 import { AiFillFileImage, AiOutlineSend } from 'react-icons/ai';
 import Button from '../components/Button';
 import * as actions from '../stores/actions/index';
@@ -90,13 +91,6 @@ class Messages extends Component {
         this.setState({ formData: updatedFormData });
     }
 
-    clearInputValues() {
-        const formObjKey = Object.keys(this.state.formData).map(key => key);
-        const formData = { ...this.state.formData };
-        formObjKey.forEach(el => formData[el].value = '');
-        this.setState({ formData });
-    }
-
     onSubmitHandler(event) {
         event.preventDefault();
         const { imageUpload, textarea } = this.state.formData;
@@ -112,7 +106,9 @@ class Messages extends Component {
                 recipientRoom: window.location.search.split('=')[1]
             });
         }
-        this.clearInputValues();
+        this.setState({
+            formData: clearInputValues(this.state.formData)
+        });
         event.target.reset();
     }
 

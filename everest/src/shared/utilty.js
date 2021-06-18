@@ -25,3 +25,10 @@ export const checkValidation = (value, rules) => {
 
     return isValid;
 }
+
+export const clearInputValues = (form) => {
+    const formObjKey = Object.keys(form).map(key => key);
+    const formData = {...form};
+    formObjKey.forEach(el => formData[el].value = '');
+    return formData;
+}

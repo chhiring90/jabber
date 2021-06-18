@@ -7,7 +7,7 @@ import { FormSection, FormContainer, FormGraphic } from '../hoc/FormLayout';
 import AuthForm from '../components/AuthForm';
 import Dialog from '../components/Dialog';
 import * as actions from '../stores/actions/index';
-import { checkValidation } from '../shared/utilty';
+import { checkValidation, clearInputValues } from '../shared/utilty';
 
 class Login extends Component {
 
@@ -26,7 +26,7 @@ class Login extends Component {
                     name: "email",
                 },
                 validation: {
-                    require: true,
+                    required: true,
                     isEmail: true
                 },
                 valid: false,
@@ -44,7 +44,7 @@ class Login extends Component {
                     name: 'password',
                 },
                 validation: {
-                    require: true,
+                    required: true,
                     minLength: 8
                 },
                 valid: false,
@@ -62,7 +62,7 @@ class Login extends Component {
                     name: 'checkbox'
                 },
                 validation: {
-                    require: false,
+                    required: false,
                 },
                 valid: false,
                 touched: false
@@ -75,7 +75,6 @@ class Login extends Component {
             children: 'Not registered yet ? '
         },
         isLoginForm: true,
-        showDialog: false
     }
 
     formSubmitHandler = (event) => {
@@ -83,25 +82,25 @@ class Login extends Component {
 
         const { email, password } = this.state.formData;
         this.props.onLogin(email.value, password.value);
-        this.setState({ showDialog: true });
+        this.setState({
+            formData: clearInputValues(this.state.formData)
+        });
+        // event.target.reset();
     }
 
     inputChangeHandler = (event, controlName) => {
         const isCheckGroup = ['checkbox', 'radio'].includes[event.target.type];
-        // let checkboxValue = event.target.checked ? 'true' : 'false';
-
-        let value = isCheckGroup ? event.target.checked : event.target.value;
-        const updateControls = {
+        const updatedFormData = {
             ...this.state.formData,
             [controlName]: {
                 ...this.state.formData[controlName],
-                value,
+                value: isCheckGroup ? event.target.checked : event.target.value,
                 valid: checkValidation(event.target.value, this.state.formData[controlName].validation),
                 touched: true
             }
         };
 
-        this.setState({ formData: updateControls });
+        this.setState({ formData: updatedFormData });
     }
 
     componentDidMount() {
@@ -111,14 +110,12 @@ class Login extends Component {
         // console.log(this.props.message);
     }
 
+    componentWillUnmount() {
+    }
+
     render() {
         let renderComponent = (
             <>
-                {this.state.showDialog ?
-                    <Dialog
-                        messageType={this.props.message[0]}
-                        messageText={this.props.message[1]}
-                        show={this.state.showDialog} /> : null}
                 <FormSection>
                     <FormContainer>
                         <AuthForm
@@ -147,7 +144,7 @@ const mapStateToProps = state => {
     return {
         isLoading: state.auth.loading,
         error: state.auth.error,
-        message: state.auth.message,
+        message: state.auth.message.login,
         authRedirectPath: state.auth.authRedirectPath,
         isAuthenticated: state.auth.isAuthenticated,
     }
