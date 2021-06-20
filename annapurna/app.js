@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const userRoutes = require('./routes/userRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const recipientRoutes = require('./routes/recipientRoutes');
 const globalErrorHandler = require('./controllers/errorController');
 const AppError = require('./utils/appError');
 
@@ -35,6 +36,7 @@ app.use(cors({
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/rooms', roomRoutes);
 app.use('/api/v1/messages', messageRoutes);
+app.use('/api/v1/recipients', recipientRoutes);
 
 app.use('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));

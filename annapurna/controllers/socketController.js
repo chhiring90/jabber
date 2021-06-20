@@ -67,10 +67,11 @@ module.exports = (io, socket) => {
 
     const onMessage = async (message) => {
         try {
-            const { creator, messageBody, parentMessage, recipientRoom, recipientId, messageId } = message;
+            const { creator, messageBody, parentMessage, recipientRoom } = message;
             // console.log(message);
+            let newMessage;
             if (creator) {
-                await Message.create({
+                newMessage = await Message.create({
                     creator,
                     messageBody,
                     parentMessage
@@ -78,10 +79,25 @@ module.exports = (io, socket) => {
             }
 
             socket.join(recipientRoom);
-            io.to(recipientRoom).emit('messagesend', message);
+            socket.to(recipientRoom).emit('messagesend', newMessage);
             console.log(socket.rooms);
         } catch (err) {
             console.log(err);
+        }
+    }
+
+    const onCreateRecipient = async (recipientData) => {
+        try {
+            const {recipient, recipientRoom, message} = recipientData;
+            if(!recipientData || !recipient || !message) return;
+            await MessageRecipient.create({
+                recipient,
+                recipientRoom,
+                message
+            });
+
+        }catch (err) {
+            console.log(err.message);
         }
     }
 
@@ -99,5 +115,6 @@ module.exports = (io, socket) => {
     socket.on('createroom', onCreateRoom);
     socket.on('joinroom', onJoinRoom);
     socket.on('message', onMessage);
+    socket.on('createrecipient', onCreateRecipient);
     socket.on('disconnect', onDisconnect);
 };

@@ -9,7 +9,7 @@ import socket from '../socket';
 import Avatar from '../components/Avatar';
 import Message from '../components/Message';
 import Input from '../components/Input';
-import {clearInputValues} from '../shared/utilty';
+import { clearInputValues } from '../shared/utilty';
 import { AiFillFileImage, AiOutlineSend } from 'react-icons/ai';
 import Button from '../components/Button';
 import * as actions from '../stores/actions/index';
@@ -58,25 +58,55 @@ class Messages extends Component {
     }
 
     componentDidMount() {
+        console.log('componentDidMount() lifecycle')
+        const roomId = window.location.search.split('=')[1];
+        const user = this.props.user;
+        axios
+            .get(`/recipients/${user._id}/${roomId}`)
+            .then(res => {
+                console.log(res);
+            }).catch(err => console.log(err.response.data));
         socket.connect();
-        socket.on('connect', this.props.socketConnect(this.props.user));
-        socket.emit('joinroom', { room: this.props.roomId, user: this.props.user });
-        // socket.on('messagesend', (message) => console.log(message, '[MESSAGESEND]'));
+        socket.on('connect', this.props.socketConnect(user));
+        socket.emit('joinroom', { room: roomId, user });
         socket.on('messagesend', (message) => {
+            console.log(message, '[MESSAGESEND]');
+            const recipientData = {
+                recipient: user._id,
+                recipientRoom: roomId,
+                message: message._id
+            }
+            if (message) {
+                socket.emit('createrecipient', recipientData);
+            }
             const oldMessages = this.state.messages;
             let updateMessages = oldMessages.concat(message);
             this.setState({ messages: updateMessages });
         });
+        socket.on('messagerecipient', (message) => {
+            // console.log(message, '[MESSAGESEND]');
+            // const data = {
+            //     recipient: this.props.user.Id,
+            //     recipientRoom: this.props.roomId,
+            //     message: 
+            // };
+            // socket.emit('createrecipient', data)
+        });
         this.scrollToBottom();
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
+        console.log('componentDidUpdate() lifecycle')
         this.scrollToBottom();
+    }
+
+    shouldComponentUpdate(nextProps, prevState) {
+        const { activeRoomUser } = this.props;
+        return nextProps.activeRoomUser._id !== activeRoomUser._id;
     }
 
     componentWillUnmount() {
         socket.disconnect();
-        this.setState({messages: []});
     }
 
     onChangeHandler(event, controlName) {
@@ -113,7 +143,7 @@ class Messages extends Component {
     }
 
     scrollToBottom() {
-        if(scrollBottomRef.current){
+        if (scrollBottomRef.current) {
             scrollBottomRef.current.scrollIntoView({
                 behavior: 'smooth',
                 block: 'end',
@@ -123,6 +153,7 @@ class Messages extends Component {
     }
 
     render() {
+        console.log('render()')
         const inputClass = {
             textarea: 'border-none rounded-none px-4 py-7 resize-none max-h-20 h-20 focus:ring-opacity-0 focus:ring-offset-0 font-semibold bg-white text-brand-gray',
             file: {
@@ -194,7 +225,7 @@ class Messages extends Component {
 const mapStateToProps = (state) => {
     return {
         user: state.auth.user,
-        // roomId: state.chat.room._id
+        room: state.chat.room
     }
 }
 

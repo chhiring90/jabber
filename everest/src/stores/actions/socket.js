@@ -33,10 +33,10 @@ export const socketConnect = (user) => {
     return dispatch => {
         dispatch(socketConnectStart());
         const { _id, slug } = user;
+        console.log('Socket connection on client successfully');
         socket.emit('joinserver', { _id, slug }, err => {
             dispatch(socketConnectFail(err));
         });
-        console.log('Socket connection on client successfully');
         dispatch(socketConnectSuccess());
     }
 }

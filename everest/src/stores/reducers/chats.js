@@ -69,7 +69,6 @@ const joinedServerSuccess = (state, action) => {
         }
         return user;
     });
-
     return updateObject(state, {
         users: updatedUser,
         loading: action.loading,

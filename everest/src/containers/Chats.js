@@ -4,6 +4,7 @@ import 'simplebar/dist/simplebar.min.css';
 import { connect } from 'react-redux';
 import socket from '../socket';
 
+import axios from '../axios-api';
 import Chat from '../components/Chat';
 import Button from '../components/Button';
 import Input from '../components/Input';
@@ -38,10 +39,13 @@ class Chats extends Component {
     componentDidMount() {
         socket.connect();
         this.props.fetchUser(this.props.currentUserId);
-        
+
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
+        // if (this.props.activeRoom === prevProps.activeRoom) return;
+        // console.log(this.props, '[CURRENTPROPS] [CHATS]');
+        // console.log(prevProps, '[PREVPROPS] [CHATS]');
     }
 
     clickHandler(event, slug) {

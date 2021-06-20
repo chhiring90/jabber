@@ -28,8 +28,14 @@ class UserDashboard extends Component {
         socket.on('disconnectserver', (userId) => this.props.disconnectServer(userId));
     }
 
-    componentDidUpdate() {
-        // socket.on('joinedserver', (userId) => this.props.joinedServer(userId));
+    componentDidUpdate(prevProps, prevState) {
+        // if(prevProps === this.props) {
+        //     console.log(prevProps === this.props, '[USERDASHBOARD]');
+        //     return prevProps === this.props;
+        // }
+        // console.log(prevProps === this.props, '[USERDASHBOARD]')
+        // console.log(prevProps, '[PREVSTATE] [USERDASHBOARD]');
+        // console.log(this.props, '[CURRENTSTATE] [USERDASHBOARD]');
     }
 
     componentWillUnmount() {
