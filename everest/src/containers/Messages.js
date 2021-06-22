@@ -14,6 +14,7 @@ import { AiFillFileImage, AiOutlineSend } from 'react-icons/ai';
 import Button from '../components/Button';
 import * as actions from '../stores/actions/index';
 const scrollBottomRef = React.createRef();
+
 class Messages extends Component {
 
     constructor(props) {
@@ -76,21 +77,14 @@ class Messages extends Component {
                 recipientRoom: roomId,
                 message: message._id
             }
-            if (message) {
+
+            if (user._id && roomId && message._id) {
                 socket.emit('createrecipient', recipientData);
             }
+
             const oldMessages = this.state.messages;
             let updateMessages = oldMessages.concat(message);
             this.setState({ messages: updateMessages });
-        });
-        socket.on('messagerecipient', (message) => {
-            // console.log(message, '[MESSAGESEND]');
-            // const data = {
-            //     recipient: this.props.user.Id,
-            //     recipientRoom: this.props.roomId,
-            //     message: 
-            // };
-            // socket.emit('createrecipient', data)
         });
         this.scrollToBottom();
     }

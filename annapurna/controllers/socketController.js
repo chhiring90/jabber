@@ -89,7 +89,8 @@ module.exports = (io, socket) => {
     const onCreateRecipient = async (recipientData) => {
         try {
             const {recipient, recipientRoom, message} = recipientData;
-            if(!recipientData || !recipient || !message) return;
+            console.log(recipient);
+            if(!recipientRoom && !recipient && !message) return;
             await MessageRecipient.create({
                 recipient,
                 recipientRoom,

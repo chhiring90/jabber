@@ -18,6 +18,7 @@ class UserDashboard extends Component {
             activeUser: null
         }
 
+        this.clickHandler = this.clickHandler.bind(this);
         this.onLogoutHandler = this.onLogoutHandler.bind(this);
     }
 
@@ -26,6 +27,10 @@ class UserDashboard extends Component {
         socket.on('connect', this.props.socketConnect(this.props.user));
         socket.on('joinedserver',(userId) => this.props.joinedServer(userId));
         socket.on('disconnectserver', (userId) => this.props.disconnectServer(userId));
+    }
+
+    componentShouldUpdate(nextProps, nextState) {
+        return true;
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -72,6 +77,27 @@ class UserDashboard extends Component {
     //         activeUser: activeUser[0]
     //     });
     // }
+    
+    clickHandler(event, slug) {
+        event.preventDefault();
+        let roomSlug = `${slug}&${this.props.user.slug}`;
+        let name, admin;
+        if (!name || !admin) {
+            name = `${slug} ${this.props.user.slug}`.split('-').join(' ').toUpperCase();
+            admin = undefined;
+        }
+
+        const roomInfo = {
+            userId: this.props.user._id,
+            name,
+            admin,
+            slug: roomSlug,
+        }
+
+        // this.props.sendCreateRoom(roomInfo);
+        socket.emit('createroom', roomInfo);
+        socket.on('createdroom', (room) => this.props.createdRoom(room, slug));
+    }
 
     render() {
         let { name } = this.props.user;
@@ -86,6 +112,7 @@ class UserDashboard extends Component {
                 <section className="flex-none w-4/12 px-8 pt-7">
                     <Chats
                         activeUser={this.state.activeUser ? this.state.activeUser.slug : null}
+                        clicked={this.clickHandler}
                         />
                 </section>
                 <section className="flex-none w-6/12 pr-8 pt-7">

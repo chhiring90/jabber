@@ -15,7 +15,7 @@ class Chats extends Component {
 
     constructor(props) {
         super(props);
-        this.clickHandler = this.clickHandler.bind(this);
+        // this.clickHandler = this.clickHandler.bind(this);
     }
 
     state = {
@@ -39,7 +39,6 @@ class Chats extends Component {
     componentDidMount() {
         socket.connect();
         this.props.fetchUser(this.props.currentUserId);
-
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -48,26 +47,26 @@ class Chats extends Component {
         // console.log(prevProps, '[PREVPROPS] [CHATS]');
     }
 
-    clickHandler(event, slug) {
-        event.preventDefault();
-        let roomSlug = `${slug}&${this.props.user.slug}`;
-        let name, admin;
-        if (!name || !admin) {
-            name = `${slug} ${this.props.user.slug}`.split('-').join(' ').toUpperCase();
-            admin = undefined;
-        }
+    // clickHandler(event, slug) {
+    //     event.preventDefault();
+    //     let roomSlug = `${slug}&${this.props.user.slug}`;
+    //     let name, admin;
+    //     if (!name || !admin) {
+    //         name = `${slug} ${this.props.user.slug}`.split('-').join(' ').toUpperCase();
+    //         admin = undefined;
+    //     }
 
-        const roomInfo = {
-            userId: this.props.user._id,
-            name,
-            admin,
-            slug: roomSlug,
-        }
+    //     const roomInfo = {
+    //         userId: this.props.user._id,
+    //         name,
+    //         admin,
+    //         slug: roomSlug,
+    //     }
 
-        // this.props.sendCreateRoom(roomInfo);
-        socket.emit('createroom', roomInfo);
-        socket.on('createdroom', (room) => this.props.createdRoom(room, slug));
-    }
+    //     // this.props.sendCreateRoom(roomInfo);
+    //     socket.emit('createroom', roomInfo);
+    //     socket.on('createdroom', (room) => this.props.createdRoom(room, slug));
+    // }
 
     componentWillUnmount() {
         socket.disconnect();
@@ -76,7 +75,7 @@ class Chats extends Component {
     render() {
         const chats = this.props.users.map(user => {
             return <Chat
-                clicked={(event) => this.clickHandler(event, user.slug)}
+                clicked={(event) => this.props.clicked(event, user.slug)}
                 active={user.slug === this.props.activeUser}
                 key={user._id}
                 status={`${user.active ? "online" : 'inactive'}`}
